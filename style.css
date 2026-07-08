@@ -882,3 +882,192 @@ nav a.active::after {
   }
 }
 
+/* --------------------------------------------------
+   Mobile Responsive Adjustments & Hamburger Menu
+   -------------------------------------------------- */
+
+/* Hamburger Button */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 28px;
+  height: 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 1100;
+  padding: 0;
+}
+
+.menu-toggle:focus {
+  outline: none;
+}
+
+.hamburger-bar {
+  width: 100%;
+  height: 3px;
+  background-color: #f4f4f4;
+  border-radius: 2px;
+  transition: all 0.3s cubic-bezier(0.77, 0.2, 0.05, 1.0);
+}
+
+/* Transform Hamburger into 'X' when active */
+.menu-toggle.active .hamburger-bar:nth-child(1) {
+  transform: translateY(8.5px) rotate(45deg);
+}
+
+.menu-toggle.active .hamburger-bar:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.active .hamburger-bar:nth-child(3) {
+  transform: translateY(-8.5px) rotate(-45deg);
+}
+
+/* Mobile responsive navigation & styling */
+@media (max-width: 767px) {
+  .menu-toggle {
+    display: flex;
+  }
+
+  .header-content .cta {
+    display: none; /* Hide desktop CTA in header line */
+  }
+
+  .nav-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 290px;
+    height: 100vh;
+    background: rgba(18, 18, 18, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2.5rem;
+    z-index: 1000;
+    transition: right 0.4s cubic-bezier(0.77, 0.2, 0.05, 1.0);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.6);
+    border-left: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+  }
+
+  .nav-menu.active {
+    right: 0;
+  }
+
+  nav ul {
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  nav a {
+    font-size: 1.25rem;
+  }
+
+  .cta-mobile {
+    display: block;
+    margin-top: 1rem;
+    width: 100%;
+    text-align: center;
+  }
+
+  .cta-mobile .button {
+    background: #d95a11;
+    color: #fff;
+    padding: 0.8rem 2rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    display: inline-block;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    width: 100%;
+  }
+
+  body.no-scroll {
+    overflow: hidden;
+  }
+}
+
+@media (min-width: 768px) {
+  .cta-mobile {
+    display: none;
+  }
+}
+
+/* Horizontal scrollable tab list for teachers on small viewports */
+@media (max-width: 991px) {
+  .teacher-small-cards {
+    flex-direction: row !important;
+    overflow-x: auto;
+    padding: 0.5rem 0.2rem 1.2rem 0.2rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: #d95a11 rgba(255, 255, 255, 0.05);
+    gap: 0.8rem;
+  }
+
+  /* Style scrollbar for webkit browsers */
+  .teacher-small-cards::-webkit-scrollbar {
+    height: 5px;
+  }
+  .teacher-small-cards::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+  }
+  .teacher-small-cards::-webkit-scrollbar-thumb {
+    background: #d95a11;
+    border-radius: 10px;
+  }
+
+  .teacher-small-card {
+    flex: 0 0 auto;
+    width: 160px;
+    padding: 0.8rem 1rem;
+    flex-direction: column;
+    text-align: center;
+    gap: 0.6rem;
+  }
+
+  .teacher-small-card .card-avatar {
+    width: 44px;
+    height: 44px;
+    font-size: 1.5rem;
+  }
+
+  .teacher-small-card .card-meta h4 {
+    font-size: 0.95rem;
+  }
+
+  .teacher-small-card .card-meta p {
+    font-size: 0.75rem;
+  }
+}
+
+/* Specific spacing and padding fixes on mobile devices */
+@media (max-width: 480px) {
+  .course-detail-card {
+    padding: 1.5rem;
+  }
+  
+  .teacher-details-panel {
+    padding: 1.5rem;
+  }
+
+  .contact-form-container {
+    padding: 1.5rem;
+  }
+
+  .mural-collage {
+    gap: 0.8rem;
+  }
+
+  .collage-item {
+    padding: 0.5rem;
+  }
+}
+
