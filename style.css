@@ -1071,3 +1071,175 @@ nav a.active::after {
   }
 }
 
+/* --------------------------------------------------
+   Auth Pages & Admin Dashboard Styles
+   -------------------------------------------------- */
+
+/* Authentication Tabs */
+.auth-tabs {
+  border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+}
+
+.auth-tab-btn {
+  transition: all 0.3s ease;
+}
+
+.auth-tab-btn.active {
+  color: #fff !important;
+  border-bottom: 2px solid #d95a11 !important;
+}
+
+/* User greeting in header */
+.user-greeting {
+  color: #a0a0a0;
+  font-size: 0.9rem;
+  margin-right: 0.5rem;
+  font-weight: 600;
+}
+
+/* Forms Select input styling */
+select {
+  width: 100%;
+  background: #252525;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.8rem 1rem;
+  border-radius: 0.5rem;
+  color: #f4f4f4;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+select:focus {
+  outline: none;
+  border-color: #d95a11;
+  box-shadow: 0 0 8px rgba(217, 90, 17, 0.35);
+}
+
+/* Admin Dashboard CSS layout overrides */
+.admin-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 1rem;
+}
+
+.admin-tab-btn {
+  background: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 0.8rem 1.5rem;
+  color: #a0a0a0;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.admin-tab-btn.active, .admin-tab-btn:hover {
+  color: #fff !important;
+  background: #d95a11 !important;
+  border-color: #d95a11 !important;
+}
+
+.admin-panel {
+  background: #1a1a1a;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  margin-bottom: 3rem;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  text-align: left;
+}
+
+.admin-table th, .admin-table td {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: #f4f4f4;
+}
+
+.admin-table th {
+  color: #d95a11;
+  font-weight: 600;
+}
+
+.admin-table tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.admin-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.btn-action {
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.3rem;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: transform 0.2s ease;
+}
+
+.btn-edit {
+  background: #d95a11;
+  color: #fff;
+  margin-right: 0.5rem;
+}
+
+.btn-delete {
+  background: #e74c3c;
+  color: #fff;
+}
+
+.btn-action:hover {
+  transform: scale(1.05);
+}
+
+/* Modals */
+.admin-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-modal-content {
+  background: #1a1a1a;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2.5rem;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  .admin-form-row {
+    grid-template-columns: 1fr;
+  }
+  .admin-table th, .admin-table td {
+    padding: 0.6rem;
+    font-size: 0.85rem;
+  }
+}
+

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Acessar Conta - Sonora Educação Musical</title>
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <!-- Header -->
+    <header id="site-header" class="header glass">
+        <div class="container header-content">
+            <div class="logo">
+                <a href="index.html"><img src="img/logo.png" alt="Sonora Logo" /></a>
+            </div>
+            <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu">
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+            </button>
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="sobre.html">Sobre Nós</a></li>
+                    <li><a href="cursos.html">Cursos</a></li>
+                    <li><a href="professores.html">Professores</a></li>
+                    <li><a href="contato.html">Contato</a></li>
+                </ul>
+                <div class="cta-mobile">
+                    <a href="https://api.whatsapp.com/message/GBODBOK3OAPBL1?autoload=1&app_absent=0&utm_source=ig" class="button enroll-btn" target="_blank" rel="noopener">Matricule‑se</a>
+                </div>
+            </nav>
+            <div class="cta">
+                <a href="https://api.whatsapp.com/message/GBODBOK3OAPBL1?autoload=1&app_absent=0&utm_source=ig" class="button enroll-btn" target="_blank" rel="noopener">Matricule‑se</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Subpage Hero -->
+    <section class="subpage-hero">
+        <div class="container">
+            <h1>Sua Conta</h1>
+            <p class="subtitle">Acesse o painel ou crie sua conta para se matricular.</p>
+        </div>
+    </section>
+
+    <!-- Login/Register Area -->
+    <section class="section">
+        <div class="container" style="max-width: 500px;">
+            <div class="auth-tabs" style="display: flex; margin-bottom: 2rem; border-bottom: 2px solid rgba(255,255,255,0.05);">
+                <button id="tab-login-btn" class="auth-tab-btn active" style="flex: 1; background: none; border: none; padding: 1rem; color: #fff; font-family: inherit; font-size: 1.1rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid #d95a11; transition: all 0.3s ease;">Entrar</button>
+                <button id="tab-register-btn" class="auth-tab-btn" style="flex: 1; background: none; border: none; padding: 1rem; color: #a0a0a0; font-family: inherit; font-size: 1.1rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.3s ease;">Cadastrar-se</button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login-form-container" class="contact-form-container" style="padding: 2rem;">
+                <form id="login-form" class="styled-form">
+                    <div class="form-group">
+                        <label for="login-username">Usuário</label>
+                        <input type="text" id="login-username" placeholder="Seu nome de usuário" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Senha</label>
+                        <input type="password" id="login-password" placeholder="Sua senha" required />
+                    </div>
+                    <button type="submit" class="button form-submit-btn" style="margin-top: 1rem;">Entrar na Conta</button>
+                </form>
+            </div>
+
+            <!-- Register Form -->
+            <div id="register-form-container" class="contact-form-container hidden" style="padding: 2rem;">
+                <form id="register-form" class="styled-form">
+                    <div class="form-group">
+                        <label for="reg-name">Nome Completo</label>
+                        <input type="text" id="reg-name" placeholder="Ex: João da Silva" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-username">Nome de Usuário</label>
+                        <input type="text" id="reg-username" placeholder="Ex: joaosilva" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-phone">Telefone / WhatsApp</label>
+                        <input type="tel" id="reg-phone" placeholder="Ex: (27) 99999-9999" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-password">Criar Senha</label>
+                        <input type="password" id="reg-password" placeholder="Sua senha segura" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-role">Tipo de Conta</label>
+                        <select id="reg-role" style="background: #252525; border: 1px solid rgba(255,255,255,0.1); padding: 0.8rem 1rem; border-radius: 0.5rem; color: #f4f4f4; font-family: inherit; width: 100%;">
+                            <option value="cliente">Cliente (Aluno)</option>
+                            <option value="adm">Administrador (ADM)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="button form-submit-btn" style="margin-top: 1rem;">Criar Minha Conta</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer section">
+        <div class="container footer-content">
+            <p>Endereço: R. Henrique Beletable, 46 - Santo Antônio, Colatina - ES, 29704-065</p>
+            <p>Instagram: <a href="https://instagram.com/sonorae.m" target="_blank" rel="noopener">@sonorae.m</a></p>
+            <p>&copy; 2026 Sonora Educação Musical</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Form toggle logic
+        const tabLoginBtn = document.getElementById('tab-login-btn');
+        const tabRegisterBtn = document.getElementById('tab-register-btn');
+        const loginContainer = document.getElementById('login-form-container');
+        const registerContainer = document.getElementById('register-form-container');
+
+        tabLoginBtn.addEventListener('click', () => {
+            tabLoginBtn.classList.add('active');
+            tabLoginBtn.style.color = '#fff';
+            tabLoginBtn.style.borderBottomColor = '#d95a11';
+            
+            tabRegisterBtn.classList.remove('active');
+            tabRegisterBtn.style.color = '#a0a0a0';
+            tabRegisterBtn.style.borderBottomColor = 'transparent';
+
+            loginContainer.classList.remove('hidden');
+            registerContainer.classList.add('hidden');
+        });
+
+        tabRegisterBtn.addEventListener('click', () => {
+            tabRegisterBtn.classList.add('active');
+            tabRegisterBtn.style.color = '#fff';
+            tabRegisterBtn.style.borderBottomColor = '#d95a11';
+            
+            tabLoginBtn.classList.remove('active');
+            tabLoginBtn.style.color = '#a0a0a0';
+            tabLoginBtn.style.borderBottomColor = 'transparent';
+
+            registerContainer.classList.remove('hidden');
+            loginContainer.classList.add('hidden');
+        });
+
+        // Authentication logic
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('login-username').value.trim();
+            const password = document.getElementById('login-password').value;
+
+            const data = JSON.parse(localStorage.getItem('sonoraData'));
+            if (!data || !data.users) {
+                alert('Erro ao carregar os dados. Recarregue a página.');
+                return;
+            }
+            const user = data.users.find(u => u.username.toLowerCase() === username.toLowerCase() && u.password === password);
+
+            if (user) {
+                localStorage.setItem('sonoraCurrentUser', JSON.stringify(user));
+                alert(`Bem-vindo, ${user.name}!`);
+                if (user.role === 'adm') {
+                    window.location.href = 'admin.html';
+                } else {
+                    window.location.href = 'index.html';
+                }
+            } else {
+                alert('Usuário ou senha incorretos.');
+            }
+        });
+
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('reg-name').value.trim();
+            const username = document.getElementById('reg-username').value.trim();
+            const phone = document.getElementById('reg-phone').value.trim();
+            const password = document.getElementById('reg-password').value;
+            const role = document.getElementById('reg-role').value;
+
+            const data = JSON.parse(localStorage.getItem('sonoraData'));
+            if (!data || !data.users) {
+                alert('Erro ao carregar os dados. Recarregue a página.');
+                return;
+            }
+
+            // Check if username already exists
+            const userExists = data.users.some(u => u.username.toLowerCase() === username.toLowerCase());
+            if (userExists) {
+                alert('Nome de usuário já cadastrado. Por favor, escolha outro.');
+                return;
+            }
+
+            const newUser = { name, username, phone, password, role };
+            data.users.push(newUser);
+            localStorage.setItem('sonoraData', JSON.stringify(data));
+
+            alert('Conta criada com sucesso! Faça login para continuar.');
+            tabLoginBtn.click();
+        });
+    </script>
+</body>
+</html>

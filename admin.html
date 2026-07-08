@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painel Administrativo - Sonora Educação Musical</title>
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        .admin-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 1rem;
+        }
+        .admin-tab-btn {
+            background: #1a1a1a;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 0.8rem 1.5rem;
+            color: #a0a0a0;
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        .admin-tab-btn.active, .admin-tab-btn:hover {
+            color: #fff;
+            background: #d95a11;
+            border-color: #d95a11;
+        }
+        .admin-panel {
+            background: #1a1a1a;
+            border-radius: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            margin-bottom: 3rem;
+        }
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            text-align: left;
+        }
+        .admin-table th, .admin-table td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .admin-table th {
+            color: #d95a11;
+            font-weight: 600;
+        }
+        .admin-table tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .admin-form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        @media (max-width: 768px) {
+            .admin-form-row {
+                grid-template-columns: 1fr;
+            }
+            .admin-table th, .admin-table td {
+                padding: 0.5rem;
+                font-size: 0.85rem;
+            }
+        }
+        .btn-action {
+            padding: 0.4rem 0.8rem;
+            border-radius: 0.3rem;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: transform 0.2s ease;
+        }
+        .btn-edit {
+            background: #d95a11;
+            color: #fff;
+            margin-right: 0.5rem;
+        }
+        .btn-delete {
+            background: #e74c3c;
+            color: #fff;
+        }
+        .btn-action:hover {
+            transform: scale(1.05);
+        }
+        .admin-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .admin-modal-content {
+            background: #1a1a1a;
+            border-radius: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2.5rem;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header id="site-header" class="header glass">
+        <div class="container header-content">
+            <div class="logo">
+                <a href="index.html"><img src="img/logo.png" alt="Sonora Logo" /></a>
+            </div>
+            <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu">
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+            </button>
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="sobre.html">Sobre Nós</a></li>
+                    <li><a href="cursos.html">Cursos</a></li>
+                    <li><a href="professores.html">Professores</a></li>
+                    <li><a href="contato.html">Contato</a></li>
+                </ul>
+                <div class="cta-mobile">
+                    <a href="#" class="button logout-btn">Sair</a>
+                </div>
+            </nav>
+            <div class="cta">
+                <a href="#" class="button logout-btn">Sair</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Subpage Hero -->
+    <section class="subpage-hero">
+        <div class="container">
+            <h1>Painel ADM</h1>
+            <p class="subtitle">Gerencie cursos, professores, matrículas e informações do site.</p>
+        </div>
+    </section>
+
+    <!-- Admin Panel Area -->
+    <section class="section">
+        <div class="container">
+            <!-- Tabs Menu -->
+            <div class="admin-tabs">
+                <button class="admin-tab-btn active" data-target="panel-enrollments">Meus Cursos (Matrículas)</button>
+                <button class="admin-tab-btn" data-target="panel-courses">Gerenciar Cursos</button>
+                <button class="admin-tab-btn" data-target="panel-teachers">Gerenciar Professores</button>
+                <button class="admin-tab-btn" data-target="panel-texts">Editar Textos Gerais</button>
+            </div>
+
+            <!-- Tab 1: Enrollments -->
+            <div id="panel-enrollments" class="admin-panel">
+                <h3 style="color: #d95a11; margin-bottom: 1rem;">Alunos Matriculados</h3>
+                <p style="color: #a0a0a0; margin-bottom: 1.5rem;">Lista completa de usuários que solicitaram matrícula pelo site.</p>
+                <div style="overflow-x: auto;">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Usuário</th>
+                                <th>Curso</th>
+                                <th>Telefone</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="enrollments-table-body">
+                            <!-- Dynamically loaded -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tab 2: Courses -->
+            <div id="panel-courses" class="admin-panel hidden">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <div>
+                        <h3 style="color: #d95a11;">Lista de Cursos</h3>
+                        <p style="color: #a0a0a0; font-size: 0.9rem;">Cursos visíveis na página inicial e na página de Cursos.</p>
+                    </div>
+                    <button class="button" id="btn-add-course" style="padding: 0.6rem 1.2rem; font-size: 0.95rem; border: none; cursor: pointer;">Adicionar Curso</button>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Ícone</th>
+                                <th>Nome do Curso</th>
+                                <th>Público</th>
+                                <th>Modalidade</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="courses-table-body">
+                            <!-- Dynamically loaded -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tab 3: Teachers -->
+            <div id="panel-teachers" class="admin-panel hidden">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <div>
+                        <h3 style="color: #d95a11;">Lista de Professores</h3>
+                        <p style="color: #a0a0a0; font-size: 0.9rem;">Professores listados na página de Professores.</p>
+                    </div>
+                    <button class="button" id="btn-add-teacher" style="padding: 0.6rem 1.2rem; font-size: 0.95rem; border: none; cursor: pointer;">Adicionar Professor</button>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Avatar</th>
+                                <th>Nome</th>
+                                <th>Instrumento/Área</th>
+                                <th>Tag</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="teachers-table-body">
+                            <!-- Dynamically loaded -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tab 4: General Texts -->
+            <div id="panel-texts" class="admin-panel hidden">
+                <h3 style="color: #d95a11; margin-bottom: 1.5rem;">Editar Informações e Textos do Site</h3>
+                <form id="texts-edit-form" class="styled-form">
+                    <h4 style="color: #f4f4f4; border-left: 3px solid #d95a11; padding-left: 0.5rem; margin-bottom: 1rem;">Homepage & Hero</h4>
+                    <div class="form-group">
+                        <label for="txt-hero-title">Título do Hero (HTML permitido para destaques)</label>
+                        <input type="text" id="txt-hero-title" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="txt-hero-subtitle">Subtítulo do Hero</label>
+                        <textarea id="txt-hero-subtitle" rows="3" required></textarea>
+                    </div>
+
+                    <h4 style="color: #f4f4f4; border-left: 3px solid #d95a11; padding-left: 0.5rem; margin-top: 2rem; margin-bottom: 1rem;">Sobre Nós</h4>
+                    <div class="form-group">
+                        <label for="txt-about-title">Título Sobre Nós</label>
+                        <input type="text" id="txt-about-title" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="txt-about-text1">Parágrafo Inicial (Homepage)</label>
+                        <textarea id="txt-about-text1" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="txt-about-text2">Parágrafo 2 (Página Sobre Nós)</label>
+                        <textarea id="txt-about-text2" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="txt-about-text3">Parágrafo 3 (Página Sobre Nós)</label>
+                        <textarea id="txt-about-text3" rows="3" required></textarea>
+                    </div>
+
+                    <h4 style="color: #f4f4f4; border-left: 3px solid #d95a11; padding-left: 0.5rem; margin-top: 2rem; margin-bottom: 1rem;">Informações de Contato</h4>
+                    <div class="form-group">
+                        <label for="txt-contact-address">Endereço Completo</label>
+                        <input type="text" id="txt-contact-address" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="txt-contact-hours">Horário de Atendimento</label>
+                        <input type="text" id="txt-contact-hours" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="txt-whatsapp-link">Link do WhatsApp</label>
+                        <input type="url" id="txt-whatsapp-link" required />
+                    </div>
+                    <div class="admin-form-row">
+                        <div class="form-group">
+                            <label for="txt-instagram-label">Instagram (@nome)</label>
+                            <input type="text" id="txt-instagram-label" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="txt-instagram-link">Link do Instagram</label>
+                            <input type="url" id="txt-instagram-link" required />
+                        </div>
+                    </div>
+
+                    <button type="submit" class="button form-submit-btn" style="margin-top: 2rem; width: auto; align-self: flex-start; padding: 1rem 2rem;">Salvar Alterações</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modals for adding/editing dynamic entities -->
+    <div id="modal-container" class="admin-modal hidden">
+        <!-- Dynamically filled with Course / Teacher forms -->
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer section">
+        <div class="container footer-content">
+            <p>Endereço: <span id="footer-address-text">R. Henrique Beletable, 46 - Santo Antônio, Colatina - ES, 29704-065</span></p>
+            <p>Instagram: <a href="https://instagram.com/sonorae.m" target="_blank" rel="noopener" id="footer-instagram-link">@sonorae.m</a></p>
+            <p>&copy; 2026 Sonora Educação Musical</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Security check: Only Admins allowed
+        const checkAdmin = () => {
+            const currentUser = JSON.parse(localStorage.getItem('sonoraCurrentUser'));
+            if (!currentUser || currentUser.role !== 'adm') {
+                alert('Acesso negado. Apenas administradores podem acessar esta página.');
+                window.location.href = 'login.html';
+            }
+        };
+        checkAdmin();
+
+        // Admin Tab Logic
+        const tabs = document.querySelectorAll('.admin-tab-btn');
+        const panels = document.querySelectorAll('.admin-panel');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                panels.forEach(p => p.classList.add('hidden'));
+
+                tab.classList.add('active');
+                const target = tab.getAttribute('data-target');
+                document.getElementById(target).classList.remove('hidden');
+            });
+        });
+
+        // Load and render dynamic admin tables
+        function refreshAdminData() {
+            const data = JSON.parse(localStorage.getItem('sonoraData'));
+            if (!data) return;
+            
+            // 1. Render Enrollments
+            const enrollmentsBody = document.getElementById('enrollments-table-body');
+            enrollmentsBody.innerHTML = '';
+            if (!data.enrollments || data.enrollments.length === 0) {
+                enrollmentsBody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#a0a0a0;">Nenhuma matrícula realizada ainda.</td></tr>';
+            } else {
+                data.enrollments.forEach((enc, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${enc.name}</td>
+                        <td>${enc.username}</td>
+                        <td>${enc.courseTitle}</td>
+                        <td>${enc.phone}</td>
+                        <td>
+                            <button class="btn-action btn-delete" onclick="deleteEnrollment(${index})">Remover</button>
+                        </td>
+                    `;
+                    enrollmentsBody.appendChild(row);
+                });
+            }
+
+            // 2. Render Courses
+            const coursesBody = document.getElementById('courses-table-body');
+            coursesBody.innerHTML = '';
+            if (data.courses) {
+                data.courses.forEach((course, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td style="font-size: 1.8rem;">${course.icon}</td>
+                        <td><strong>${course.title}</strong></td>
+                        <td>${course.audience || 'Geral'}</td>
+                        <td>${course.modality || 'Presencial'}</td>
+                        <td>
+                            <button class="btn-action btn-edit" onclick="openCourseModal(${index})">Editar</button>
+                            <button class="btn-action btn-delete" onclick="deleteCourse(${index})">Excluir</button>
+                        </td>
+                    `;
+                    coursesBody.appendChild(row);
+                });
+            }
+
+            // 3. Render Teachers
+            const teachersBody = document.getElementById('teachers-table-body');
+            teachersBody.innerHTML = '';
+            if (data.teachers) {
+                data.teachers.forEach((teacher, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td style="font-size: 1.8rem;">${teacher.avatar}</td>
+                        <td><strong>${teacher.name}</strong></td>
+                        <td>${teacher.instrument}</td>
+                        <td><span style="color:#d95a11; font-weight:600;">${teacher.tag}</span></td>
+                        <td>
+                            <button class="btn-action btn-edit" onclick="openTeacherModal(${index})">Editar</button>
+                            <button class="btn-action btn-delete" onclick="deleteTeacher(${index})">Excluir</button>
+                        </td>
+                    `;
+                    teachersBody.appendChild(row);
+                });
+            }
+
+            // 4. Fill Site Texts Form
+            if (data.texts) {
+                document.getElementById('txt-hero-title').value = data.texts.heroTitle;
+                document.getElementById('txt-hero-subtitle').value = data.texts.heroSubtitle;
+                document.getElementById('txt-about-title').value = data.texts.aboutTitle;
+                document.getElementById('txt-about-text1').value = data.texts.aboutText1;
+                document.getElementById('txt-about-text2').value = data.texts.aboutText2;
+                document.getElementById('txt-about-text3').value = data.texts.aboutText3;
+                document.getElementById('txt-contact-address').value = data.texts.address;
+                document.getElementById('txt-contact-hours').value = data.texts.contactHours;
+                document.getElementById('txt-whatsapp-link').value = data.texts.whatsappLink;
+                document.getElementById('txt-instagram-label').value = data.texts.instagram;
+                document.getElementById('txt-instagram-link').value = data.texts.instagramLink;
+            }
+        }
+
+        // Action functions: delete enrollment
+        window.deleteEnrollment = function(index) {
+            if (confirm('Tem certeza que deseja remover esta matrícula?')) {
+                const data = JSON.parse(localStorage.getItem('sonoraData'));
+                data.enrollments.splice(index, 1);
+                localStorage.setItem('sonoraData', JSON.stringify(data));
+                refreshAdminData();
+            }
+        };
+
+        // Delete Course
+        window.deleteCourse = function(index) {
+            if (confirm('Deseja mesmo excluir este curso? Ele sumirá de todas as páginas.')) {
+                const data = JSON.parse(localStorage.getItem('sonoraData'));
+                data.courses.splice(index, 1);
+                localStorage.setItem('sonoraData', JSON.stringify(data));
+                refreshAdminData();
+            }
+        };
+
+        // Delete Teacher
+        window.deleteTeacher = function(index) {
+            if (confirm('Deseja mesmo excluir este professor? Ele sumirá da página de professores.')) {
+                const data = JSON.parse(localStorage.getItem('sonoraData'));
+                data.teachers.splice(index, 1);
+                localStorage.setItem('sonoraData', JSON.stringify(data));
+                refreshAdminData();
+            }
+        };
+
+        // Form Submission: Site Texts
+        document.getElementById('texts-edit-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const data = JSON.parse(localStorage.getItem('sonoraData'));
+            data.texts.heroTitle = document.getElementById('txt-hero-title').value;
+            data.texts.heroSubtitle = document.getElementById('txt-hero-subtitle').value;
+            data.texts.aboutTitle = document.getElementById('txt-about-title').value;
+            data.texts.aboutText1 = document.getElementById('txt-about-text1').value;
+            data.texts.aboutText2 = document.getElementById('txt-about-text2').value;
+            data.texts.aboutText3 = document.getElementById('txt-about-text3').value;
+            data.texts.address = document.getElementById('txt-contact-address').value;
+            data.texts.contactHours = document.getElementById('txt-contact-hours').value;
+            data.texts.whatsappLink = document.getElementById('txt-whatsapp-link').value;
+            data.texts.instagram = document.getElementById('txt-instagram-label').value;
+            data.texts.instagramLink = document.getElementById('txt-instagram-link').value;
+
+            localStorage.setItem('sonoraData', JSON.stringify(data));
+            alert('Configurações salvas com sucesso!');
+            window.location.reload();
+        });
+
+        // Modals management
+        const modalContainer = document.getElementById('modal-container');
+        
+        window.closeModal = function() {
+            modalContainer.classList.add('hidden');
+            modalContainer.innerHTML = '';
+        };
+
+        // Add/Edit Course Modal
+        window.openCourseModal = function(index = null) {
+            const data = JSON.parse(localStorage.getItem('sonoraData'));
+            const isEdit = index !== null;
+            const course = isEdit ? data.courses[index] : { icon: '🎸', title: '', desc: '', audience: '', modality: '', topics: [] };
+
+            modalContainer.innerHTML = `
+                <div class="admin-modal-content">
+                    <h3 style="color:#d95a11; margin-bottom: 1.5rem;">${isEdit ? 'Editar Curso' : 'Adicionar Novo Curso'}</h3>
+                    <form id="modal-course-form" class="styled-form">
+                        <div class="admin-form-row">
+                            <div class="form-group">
+                                <label for="m-course-title">Nome do Curso</label>
+                                <input type="text" id="m-course-title" value="${course.title}" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="m-course-icon">Emoji de Ícone</label>
+                                <input type="text" id="m-course-icon" value="${course.icon}" placeholder="Ex: 🎸" required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="m-course-desc">Descrição Completa</label>
+                            <textarea id="m-course-desc" rows="3" required>${course.desc}</textarea>
+                        </div>
+                        <div class="admin-form-row">
+                            <div class="form-group">
+                                <label for="m-course-audience">Público Alvo</label>
+                                <input type="text" id="m-course-audience" value="${course.audience || ''}" placeholder="Ex: Infantil e Adultos" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="m-course-modality">Modalidade</label>
+                                <input type="text" id="m-course-modality" value="${course.modality || ''}" placeholder="Ex: Presencial (Individual)" required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="m-course-topics">Tópicos/Conteúdos (um por linha)</label>
+                            <textarea id="m-course-topics" rows="4" placeholder="Tópico 1\nTópico 2" required>${course.topics ? course.topics.join('\n') : ''}</textarea>
+                        </div>
+                        <div style="display:flex; justify-content:flex-end; gap: 1rem; margin-top: 1.5rem;">
+                            <button type="button" class="button" onclick="closeModal()" style="background:#333; border:none; cursor:pointer;">Cancelar</button>
+                            <button type="submit" class="button" style="border:none; cursor:pointer;">Salvar Curso</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            modalContainer.classList.remove('hidden');
+
+            document.getElementById('modal-course-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const title = document.getElementById('m-course-title').value.trim();
+                const icon = document.getElementById('m-course-icon').value.trim();
+                const desc = document.getElementById('m-course-desc').value.trim();
+                const audience = document.getElementById('m-course-audience').value.trim();
+                const modality = document.getElementById('m-course-modality').value.trim();
+                const topics = document.getElementById('m-course-topics').value.trim().split('\n').filter(t => t.trim() !== '');
+
+                const id = isEdit ? course.id : title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '-');
+
+                const newCourse = { id, icon, title, desc, audience, modality, topics };
+
+                if (isEdit) {
+                    data.courses[index] = newCourse;
+                } else {
+                    data.courses.push(newCourse);
+                }
+
+                localStorage.setItem('sonoraData', JSON.stringify(data));
+                alert('Curso salvo com sucesso!');
+                closeModal();
+                refreshAdminData();
+            });
+        };
+
+        // Add/Edit Teacher Modal
+        window.openTeacherModal = function(index = null) {
+            const data = JSON.parse(localStorage.getItem('sonoraData'));
+            const isEdit = index !== null;
+            const teacher = isEdit ? data.teachers[index] : { avatar: '🎙️', name: '', fullName: '', tag: '', instrument: '', bio: '', quote: '', specialties: [] };
+
+            let specTexts = '';
+            if (teacher.specialties) {
+                specTexts = teacher.specialties.map(s => `${s.title}: ${s.desc}`).join('\n');
+            }
+
+            modalContainer.innerHTML = `
+                <div class="admin-modal-content">
+                    <h3 style="color:#d95a11; margin-bottom: 1.5rem;">${isEdit ? 'Editar Professor' : 'Adicionar Novo Professor'}</h3>
+                    <form id="modal-teacher-form" class="styled-form">
+                        <div class="admin-form-row">
+                            <div class="form-group">
+                                <label for="m-teacher-name">Nome do Professor</label>
+                                <input type="text" id="m-teacher-name" value="${teacher.name}" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="m-teacher-fullname">Nome Completo com Título</label>
+                                <input type="text" id="m-teacher-fullname" value="${teacher.fullName || ''}" placeholder="Ex: Professora Beatriz" required />
+                            </div>
+                        </div>
+                        <div class="admin-form-row">
+                            <div class="form-group">
+                                <label for="m-teacher-avatar">Emoji de Avatar</label>
+                                <input type="text" id="m-teacher-avatar" value="${teacher.avatar}" placeholder="Ex: 🎙️" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="m-teacher-instrument">Instrumento/Área</label>
+                                <input type="text" id="m-teacher-instrument" value="${teacher.instrument}" placeholder="Ex: Canto & Técnica Vocal" required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="m-teacher-tag">Tag de Especialidade (exibido em destaque)</label>
+                            <input type="text" id="m-teacher-tag" value="${teacher.tag}" placeholder="Ex: Professora de Teclado" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="m-teacher-bio">Biografia do Professor</label>
+                            <textarea id="m-teacher-bio" rows="3" required>${teacher.bio}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="m-teacher-quote">Citação/Frase Marcante</label>
+                            <input type="text" id="m-teacher-quote" value="${teacher.quote}" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="m-teacher-specs">Especialidades (Formato "Título: Descrição", uma por linha)</label>
+                            <textarea id="m-teacher-specs" rows="3" placeholder="Técnica Vocal: Controle de apoio, agudos, etc..." required>${specTexts}</textarea>
+                        </div>
+                        <div style="display:flex; justify-content:flex-end; gap: 1rem; margin-top: 1.5rem;">
+                            <button type="button" class="button" onclick="closeModal()" style="background:#333; border:none; cursor:pointer;">Cancelar</button>
+                            <button type="submit" class="button" style="border:none; cursor:pointer;">Salvar Professor</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            modalContainer.classList.remove('hidden');
+
+            document.getElementById('modal-teacher-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const name = document.getElementById('m-teacher-name').value.trim();
+                const fullName = document.getElementById('m-teacher-fullname').value.trim();
+                const avatar = document.getElementById('m-teacher-avatar').value.trim();
+                const instrument = document.getElementById('m-teacher-instrument').value.trim();
+                const tag = document.getElementById('m-teacher-tag').value.trim();
+                const bio = document.getElementById('m-teacher-bio').value.trim();
+                const quote = document.getElementById('m-teacher-quote').value.trim();
+                
+                const specLines = document.getElementById('m-teacher-specs').value.trim().split('\n');
+                const specialties = specLines.map(line => {
+                    const idx = line.indexOf(':');
+                    if (idx !== -1) {
+                        return {
+                            title: line.substring(0, idx).trim(),
+                            desc: line.substring(idx + 1).trim()
+                        };
+                    } else {
+                        return { title: line.trim(), desc: '' };
+                    }
+                }).filter(s => s.title !== '');
+
+                const id = isEdit ? teacher.id : name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '-');
+
+                const newTeacher = { id, name, fullName, avatar, instrument, tag, bio, quote, specialties, imgUrl: isEdit ? teacher.imgUrl : '' };
+
+                if (isEdit) {
+                    data.teachers[index] = newTeacher;
+                } else {
+                    data.teachers.push(newTeacher);
+                }
+
+                localStorage.setItem('sonoraData', JSON.stringify(data));
+                alert('Professor salvo com sucesso!');
+                closeModal();
+                refreshAdminData();
+            });
+        };
+
+        // Open course modal on button click
+        document.getElementById('btn-add-course').addEventListener('click', () => openCourseModal());
+        // Open teacher modal on button click
+        document.getElementById('btn-add-teacher').addEventListener('click', () => openTeacherModal());
+
+        // Initialize view
+        refreshAdminData();
+    </script>
+</body>
+</html>
