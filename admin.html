@@ -164,6 +164,8 @@
                 <button class="admin-tab-btn active" data-target="panel-enrollments">Meus Cursos (Matrículas)</button>
                 <button class="admin-tab-btn" data-target="panel-courses">Gerenciar Cursos</button>
                 <button class="admin-tab-btn" data-target="panel-teachers">Gerenciar Professores</button>
+                <button class="admin-tab-btn" data-target="panel-avisos">Mural de Avisos</button>
+                <button class="admin-tab-btn" data-target="panel-images">Imagens do Site</button>
                 <button class="admin-tab-btn" data-target="panel-texts">Editar Textos Gerais</button>
             </div>
 
@@ -243,14 +245,87 @@
                 </div>
             </div>
 
-            <!-- Tab 4: General Texts -->
+            <!-- Tab 4: Notice Board (Avisos) -->
+            <div id="panel-avisos" class="admin-panel hidden">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                    <div>
+                        <h3 style="color: #d95a11; margin-bottom: 0.3rem;">Mural de Avisos</h3>
+                        <p style="color: #a0a0a0; font-size: 0.9rem;">Adicione ou remova comunicados importantes na página inicial.</p>
+                    </div>
+                    <button type="button" class="button" id="btn-add-aviso" style="border:none; cursor:pointer; padding: 0.7rem 1.5rem; font-weight: 700;">Novo Aviso</button>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Título</th>
+                                <th>Conteúdo</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="avisos-table-body">
+                            <!-- Dynamically loaded -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tab 5: Site Images -->
+            <div id="panel-images" class="admin-panel hidden">
+                <h3 style="color: #d95a11; margin-bottom: 0.5rem;">Imagens do Site</h3>
+                <p style="color: #a0a0a0; font-size: 0.9rem; margin-bottom: 2rem;">Altere as fotos do site enviando novos arquivos.</p>
+                
+                <div style="display: flex; flex-direction: column; gap: 2rem;">
+                    <!-- Logo Upload -->
+                    <div style="background:#252525; padding: 1.5rem; border-radius: 0.8rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; border: var(--border-glass);">
+                        <div>
+                            <h4 style="color:#fff; margin-bottom:0.3rem;">Logotipo do Cabeçalho</h4>
+                            <p style="color:#a0a0a0; font-size:0.85rem;">Substitua o logotipo principal exibido no cabeçalho.</p>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:1.5rem;">
+                            <img src="img/logo.png" alt="Logo atual" style="height:40px; background: rgba(255,255,255,0.05); padding: 5px; border-radius: 4px;" id="preview-logo" onerror="this.src='img/logo.png';" />
+                            <input type="file" id="upload-logo-file" accept="image/*" style="display:none;" />
+                            <button type="button" class="button" onclick="document.getElementById('upload-logo-file').click()" style="border:none; cursor:pointer;">Alterar Logotipo</button>
+                        </div>
+                    </div>
+
+                    <!-- About Image Upload -->
+                    <div style="background:#252525; padding: 1.5rem; border-radius: 0.8rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; border: var(--border-glass);">
+                        <div>
+                            <h4 style="color:#fff; margin-bottom:0.3rem;">Imagem "Sobre Nós"</h4>
+                            <p style="color:#a0a0a0; font-size:0.85rem;">Substitua a imagem grande da seção "Sobre Nós".</p>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:1.5rem;">
+                            <img src="img/about.jpg" alt="Sobre atual" style="height:60px; width: 60px; object-fit: cover; border-radius: 4px;" id="preview-about" onerror="this.src='img/about.jpg';" />
+                            <input type="file" id="upload-about-file" accept="image/*" style="display:none;" />
+                            <button type="button" class="button" onclick="document.getElementById('upload-about-file').click()" style="border:none; cursor:pointer;">Alterar Imagem</button>
+                        </div>
+                    </div>
+
+                    <!-- Background Image Upload -->
+                    <div style="background:#252525; padding: 1.5rem; border-radius: 0.8rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; border: var(--border-glass);">
+                        <div>
+                            <h4 style="color:#fff; margin-bottom:0.3rem;">Fundo do Site / Hero</h4>
+                            <p style="color:#a0a0a0; font-size:0.85rem;">Substitua a imagem de fundo principal do site.</p>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:1.5rem;">
+                            <img src="img/background.png" alt="Fundo atual" style="height:60px; width: 60px; object-fit: cover; border-radius: 4px;" id="preview-bg" onerror="this.src='img/background.png';" />
+                            <input type="file" id="upload-bg-file" accept="image/*" style="display:none;" />
+                            <button type="button" class="button" onclick="document.getElementById('upload-bg-file').click()" style="border:none; cursor:pointer;">Alterar Fundo</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 6: General Texts -->
             <div id="panel-texts" class="admin-panel hidden">
                 <h3 style="color: #d95a11; margin-bottom: 1.5rem;">Editar Informações e Textos do Site</h3>
                 <form id="texts-edit-form" class="styled-form">
                     <h4 style="color: #f4f4f4; border-left: 3px solid #d95a11; padding-left: 0.5rem; margin-bottom: 1rem;">Homepage & Hero</h4>
                     <div class="form-group">
-                        <label for="txt-hero-title">Título do Hero (HTML permitido para destaques)</label>
-                        <input type="text" id="txt-hero-title" required />
+                        <label for="txt-hero-title">Título do Hero (Bloqueado para edição)</label>
+                        <input type="text" id="txt-hero-title" disabled style="opacity: 0.6; cursor: not-allowed;" />
                     </div>
                     <div class="form-group">
                         <label for="txt-hero-subtitle">Subtítulo do Hero</label>
@@ -430,9 +505,32 @@
                 });
             }
 
-            // 4. Fill Site Texts Form
+            // 4. Render Avisos
+            const avisosBody = document.getElementById('avisos-table-body');
+            if (avisosBody) {
+                avisosBody.innerHTML = '';
+                if (!data.avisos || data.avisos.length === 0) {
+                    avisosBody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#a0a0a0;">Nenhum aviso cadastrado.</td></tr>';
+                } else {
+                    data.avisos.forEach((aviso, index) => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td style="white-space: nowrap;">${aviso.date}</td>
+                            <td><strong>${aviso.title}</strong></td>
+                            <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${aviso.content}</td>
+                            <td>
+                                <button class="btn-action btn-edit" onclick="openAvisoModal(${index})">Editar</button>
+                                <button class="btn-action btn-delete" onclick="deleteAviso(${index})">Excluir</button>
+                            </td>
+                        `;
+                        avisosBody.appendChild(row);
+                    });
+                }
+            }
+
+            // 5. Fill Site Texts Form
             if (data.texts) {
-                document.getElementById('txt-hero-title').value = data.texts.heroTitle;
+                document.getElementById('txt-hero-title').value = "Aqui nós sonhamos o seu sonho."; // Fixed hero title
                 document.getElementById('txt-hero-subtitle').value = data.texts.heroSubtitle;
                 document.getElementById('txt-about-title').value = data.texts.aboutTitle;
                 document.getElementById('txt-about-text1').value = data.texts.aboutText1;
@@ -444,6 +542,11 @@
                 document.getElementById('txt-instagram-label').value = data.texts.instagram;
                 document.getElementById('txt-instagram-link').value = data.texts.instagramLink;
             }
+
+            // Update site previews
+            document.getElementById('preview-logo').src = 'img/logo.png?t=' + Date.now();
+            document.getElementById('preview-about').src = 'img/about.jpg?t=' + Date.now();
+            document.getElementById('preview-bg').src = 'img/background.png?t=' + Date.now();
         }
 
         // Save data helper function
@@ -493,10 +596,18 @@
             }
         };
 
+        // Delete Aviso
+        window.deleteAviso = function(index) {
+            if (confirm('Deseja mesmo excluir este aviso? Ele sumirá da página inicial.')) {
+                sonoraData.avisos.splice(index, 1);
+                saveAdminData(sonoraData);
+            }
+        };
+
         // Form Submission: Site Texts
         document.getElementById('texts-edit-form').addEventListener('submit', (e) => {
             e.preventDefault();
-            sonoraData.texts.heroTitle = document.getElementById('txt-hero-title').value;
+            sonoraData.texts.heroTitle = "Aqui nós <span class=\"highlight\">sonhamos</span> o seu sonho."; // Fixed
             sonoraData.texts.heroSubtitle = document.getElementById('txt-hero-subtitle').value;
             sonoraData.texts.aboutTitle = document.getElementById('txt-about-title').value;
             sonoraData.texts.aboutText1 = document.getElementById('txt-about-text1').value;
@@ -529,6 +640,61 @@
                 window.location.reload();
             });
         });
+
+        // Setup dynamic site image uploads
+        function setupImageUploads() {
+            const logoInput = document.getElementById('upload-logo-file');
+            const aboutInput = document.getElementById('upload-about-file');
+            const bgInput = document.getElementById('upload-bg-file');
+
+            if (logoInput) {
+                logoInput.addEventListener('change', function() {
+                    handleSiteImageUpload(this.files[0], 'logo', 'preview-logo');
+                });
+            }
+            if (aboutInput) {
+                aboutInput.addEventListener('change', function() {
+                    handleSiteImageUpload(this.files[0], 'about', 'preview-about');
+                });
+            }
+            if (bgInput) {
+                bgInput.addEventListener('change', function() {
+                    handleSiteImageUpload(this.files[0], 'bg', 'preview-bg');
+                });
+            }
+        }
+
+        function handleSiteImageUpload(file, target, previewId) {
+            if (!file) return;
+            const preview = document.getElementById(previewId);
+            const originalSrc = preview.src;
+            preview.style.opacity = '0.5';
+
+            const formData = new FormData();
+            formData.append('image', file);
+
+            fetch('upload.php?target=' + target, {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                preview.style.opacity = '1';
+                if (data.success) {
+                    preview.src = data.filePath + '?t=' + Date.now();
+                    alert('Imagem de ' + target + ' atualizada com sucesso!');
+                } else {
+                    preview.src = originalSrc;
+                    alert('Erro ao enviar imagem: ' + data.message);
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                preview.style.opacity = '1';
+                preview.src = originalSrc;
+                alert('Erro de conexão ao enviar imagem.');
+            });
+        }
 
         // Modals management
         const modalContainer = document.getElementById('modal-container');
@@ -622,6 +788,81 @@
                     console.error(err);
                     localStorage.setItem('sonoraData', JSON.stringify(sonoraData));
                     alert('Curso salvo localmente.');
+                    closeModal();
+                    refreshAdminData();
+                });
+            });
+        };
+
+        // Add/Edit Aviso Modal
+        window.openAvisoModal = function(index = null) {
+            const isEdit = index !== null;
+            const currentDate = new Date().toISOString().split('T')[0];
+            const aviso = isEdit ? sonoraData.avisos[index] : { title: '', content: '', date: currentDate };
+
+            modalContainer.innerHTML = `
+                <div class="admin-modal-content">
+                    <h3 style="color:#d95a11; margin-bottom: 1.5rem;">${isEdit ? 'Editar Aviso' : 'Adicionar Novo Aviso'}</h3>
+                    <form id="modal-aviso-form" class="styled-form">
+                        <div class="form-group">
+                            <label for="m-aviso-title">Título do Aviso</label>
+                            <input type="text" id="m-aviso-title" value="${aviso.title}" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="m-aviso-date">Data de Publicação</label>
+                            <input type="date" id="m-aviso-date" value="${aviso.date}" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="m-aviso-content">Conteúdo / Mensagem</label>
+                            <textarea id="m-aviso-content" rows="5" required>${aviso.content}</textarea>
+                        </div>
+                        <div style="display:flex; justify-content:flex-end; gap: 1rem; margin-top: 1.5rem;">
+                            <button type="button" class="button" onclick="closeModal()" style="background:#333; border:none; cursor:pointer;">Cancelar</button>
+                            <button type="submit" class="button" style="border:none; cursor:pointer;">Salvar Aviso</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            modalContainer.classList.remove('hidden');
+
+            document.getElementById('modal-aviso-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const title = document.getElementById('m-aviso-title').value.trim();
+                const date = document.getElementById('m-aviso-date').value.trim();
+                const content = document.getElementById('m-aviso-content').value.trim();
+
+                const id = isEdit ? aviso.id : 'aviso-' + Date.now();
+                const newAviso = { id, title, content, date };
+
+                if (!sonoraData.avisos) {
+                    sonoraData.avisos = [];
+                }
+
+                if (isEdit) {
+                    sonoraData.avisos[index] = newAviso;
+                } else {
+                    sonoraData.avisos.push(newAviso);
+                }
+
+                fetch('data.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(sonoraData)
+                })
+                .then(res => res.json())
+                .then(resData => {
+                    if (resData.success) {
+                        alert('Aviso salvo com sucesso!');
+                        closeModal();
+                        refreshAdminData();
+                    } else {
+                        alert('Erro ao salvar aviso no servidor.');
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    localStorage.setItem('sonoraData', JSON.stringify(sonoraData));
+                    alert('Aviso salvo localmente.');
                     closeModal();
                     refreshAdminData();
                 });
@@ -787,6 +1028,10 @@
         document.getElementById('btn-add-course').addEventListener('click', () => openCourseModal());
         // Open teacher modal on button click
         document.getElementById('btn-add-teacher').addEventListener('click', () => openTeacherModal());
+        // Open aviso modal on button click
+        document.getElementById('btn-add-aviso').addEventListener('click', () => openAvisoModal());
+
+        setupImageUploads();
 
         // Initialize view
         refreshAdminData();

@@ -12,50 +12,7 @@
         "whatsappLink": "https:\/\/api.whatsapp.com\/message\/GBODBOK3OAPBL1?autoload=1&app_absent=0&utm_source=ig",
         "contactHours": "Segunda a Sexta: 08:00 às 20:00 | Sábado: 08:00 às 12:00"
     },
-    "courses": [
-        {
-            "id": "canto",
-            "title": "Canto & Técnica Vocal",
-            "icon": "🎤",
-            "desc": "Domine a sua voz. Aprenda a controlar a respiração diafragmática, melhore a afinação e adquira presença de palco com acompanhamento personalizado.",
-            "topics": [
-                "Respiração e Apoio Diafragmático",
-                "Afinação e Percepção Rítmica",
-                "Fisiologia Vocal e Saúde",
-                "Expressão e Postura Cênica"
-            ],
-            "audience": "Infantil, Jovens e Adultos",
-            "modality": "Presencial (Individual \/ Grupo)"
-        },
-        {
-            "id": "violao",
-            "title": "Violão & Guitarra",
-            "icon": "🎸",
-            "desc": "Desenvolva sua musicalidade nas cordas. Das primeiras posições de acordes às técnicas refinadas de solos, improvisação e estilos diversos (MPB, Rock, Pop).",
-            "topics": [
-                "Acordes e Transições Rápidas",
-                "Ritmos, Dedilhados e Palhetadas",
-                "Escalas, Solos e Improvisação",
-                "Prática de Repertório Customizado"
-            ],
-            "audience": "A partir de 7 anos e Adultos",
-            "modality": "Presencial (Individual \/ Dupla)"
-        },
-        {
-            "id": "teclado",
-            "title": "Teclado & Piano",
-            "icon": "🎹",
-            "desc": "Compreenda a harmonia de forma visual e prática. Aprenda leitura de partitura, estruturação de acordes e desenvolva a independência das mãos.",
-            "topics": [
-                "Postura Correta e Digitação",
-                "Leitura Clave de Sol e Fá",
-                "Estruturação de Acordes e Campo Harmônico",
-                "Arranjo e Criação Musical"
-            ],
-            "audience": "Todas as idades",
-            "modality": "Presencial (Individual)"
-        }
-    ],
+    "courses": [],
     "teachers": [
         {
             "id": "gedeon",
@@ -175,5 +132,13 @@
             "imgUrl": ""
         }
     ],
-    "enrollments": []
+    "enrollments": [],
+    "avisos": [
+        {
+            "id": "aviso-1",
+            "title": "Aulas de Férias e Workshops",
+            "content": "Estão abertas as inscrições para os workshops especiais de férias de inverno. Participe de práticas de grupo, improvisação e gravação em estúdio!",
+            "date": "2026-07-09"
+        }
+    ]
 }

@@ -43,8 +43,19 @@ if (!is_dir($destDir)) {
     mkdir($destDir, 0755, true);
 }
 
-// Generate unique name to prevent collisions and overwrite issues
-$newFilename = 'prof_' . uniqid() . '.' . $ext;
+// Determine filename: unique or static site assets
+$target = isset($_GET['target']) ? trim($_GET['target']) : '';
+
+if ($target === 'logo') {
+    $newFilename = 'logo.png';
+} elseif ($target === 'about') {
+    $newFilename = 'about.jpg';
+} elseif ($target === 'bg') {
+    $newFilename = 'background.png';
+} else {
+    $newFilename = 'upload_' . uniqid() . '.' . $ext;
+}
+
 $destPath = $destDir . $newFilename;
 
 if (move_uploaded_file($file['tmp_name'], $destPath)) {

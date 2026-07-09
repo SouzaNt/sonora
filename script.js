@@ -237,8 +237,16 @@ function updateHeaderAuth() {
   }
 
   if (currentUser) {
+    const avatarUrl = currentUser.profilePic || 'img/avatar_placeholder.svg';
+    const profileHtml = `
+      <div class="user-profile-header" style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;" id="header-user-profile">
+          <img src="${avatarUrl}" alt="Avatar" style="width:28px; height:28px; border-radius:50%; object-fit:cover; border:1.5px solid var(--primary-color);" onerror="this.src='img/avatar_placeholder.svg';" />
+          <span class="user-greeting" style="margin:0; font-size: 0.95rem; font-weight:600; color:#fff;">Olá, ${currentUser.name.split(' ')[0]}</span>
+      </div>
+    `;
+
     if (currentUser.role === 'adm') {
-      authLi.innerHTML = `<a href="admin.html" class="admin-link">Painel ADM</a>`;
+      authLi.innerHTML = `<div style="display:flex; align-items:center; gap:1.2rem;">${profileHtml} <a href="admin.html" class="admin-link">Painel ADM</a></div>`;
       if (ctaDiv) {
         ctaDiv.innerHTML = `<a href="#" class="button logout-btn" style="background: #333; border: 1px solid #d95a11;">Sair</a>`;
       }
@@ -247,7 +255,7 @@ function updateHeaderAuth() {
         mobileCta.innerHTML = `<a href="#" class="button logout-btn" style="background: #333; border: 1px solid #d95a11;">Sair</a>`;
       }
     } else {
-      authLi.innerHTML = `<span class="user-greeting" style="color: #a0a0a0; font-size: 0.9rem; margin-right: 0.5rem; font-weight: 600;">Olá, ${currentUser.name.split(' ')[0]}</span>`;
+      authLi.innerHTML = profileHtml;
       if (ctaDiv) {
         ctaDiv.innerHTML = `<a href="#" class="button logout-btn" style="background: #333; border: 1px solid #d95a11; margin-left: 0.5rem;">Sair</a>`;
       }
@@ -256,8 +264,45 @@ function updateHeaderAuth() {
         mobileCta.innerHTML = `<a href="#" class="button logout-btn" style="background: #333; border: 1px solid #d95a11;">Sair</a>`;
       }
     }
+
+    // Set mobile user profile panel in mobile nav drawer
+    if (mobileNavMenu) {
+      let mobileUserDiv = mobileNavMenu.querySelector('.mobile-user-profile');
+      if (!mobileUserDiv) {
+        mobileUserDiv = document.createElement('div');
+        mobileUserDiv.className = 'mobile-user-profile';
+        mobileUserDiv.style.cssText = 'display:flex; flex-direction:column; align-items:center; gap:0.5rem; margin-bottom:1.5rem; cursor:pointer; padding-top:1rem; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:1rem;';
+        mobileNavMenu.insertBefore(mobileUserDiv, mobileNavMenu.firstChild);
+      }
+      mobileUserDiv.innerHTML = `
+        <img src="${avatarUrl}" alt="Avatar" style="width:55px; height:55px; border-radius:50%; object-fit:cover; border:2px solid var(--primary-color);" onerror="this.src='img/avatar_placeholder.svg';" />
+        <span style="margin:0; font-size:1.1rem; font-weight:700; color:#fff;">Olá, ${currentUser.name.split(' ')[0]}</span>
+      `;
+      mobileUserDiv.onclick = () => {
+        const menuToggle = document.getElementById('menu-toggle');
+        if (menuToggle) {
+          menuToggle.classList.remove('active');
+          mobileNavMenu.classList.remove('active');
+          document.body.classList.remove('no-scroll');
+        }
+        openUserProfileModal();
+      };
+    }
+
+    // Bind header click
+    setTimeout(() => {
+      const headerProfileEl = document.getElementById('header-user-profile');
+      if (headerProfileEl) {
+        headerProfileEl.onclick = () => openUserProfileModal();
+      }
+    }, 100);
+
   } else {
-    authLi.innerHTML = ''; // Hide regular text link to avoid redundancy with the main button
+    authLi.innerHTML = ''; // Hide regular text link
+    if (mobileNavMenu) {
+      const mobileUserDiv = mobileNavMenu.querySelector('.mobile-user-profile');
+      if (mobileUserDiv) mobileUserDiv.remove();
+    }
     if (ctaDiv) {
       ctaDiv.innerHTML = `<a href="login.html" class="button enroll-btn">Entrar</a>`;
     }
@@ -560,4 +605,174 @@ function loadDynamicContent(data) {
   renderHomepageCourses(data);
   renderDetailedCourses(data);
   renderTeachersPage(data);
+  renderAvisos(data);
+}
+
+// Render dynamic notice board (mural de avisos) in index.html
+function renderAvisos(data) {
+  const container = document.getElementById('avisos-container');
+  if (!container) return;
+
+  if (!data) data = window.sonoraData;
+  if (!data || !data.avisos || data.avisos.length === 0) {
+    container.innerHTML = '<p style="text-align:center; color:var(--text-muted); font-size: 1rem; width:100%;">Nenhum aviso cadastrado no mural no momento.</p>';
+    return;
+  }
+
+  container.innerHTML = '';
+  data.avisos.forEach(aviso => {
+    const card = document.createElement('div');
+    card.className = 'about-text';
+    card.style.cssText = 'background: rgba(255, 255, 255, 0.02); border: var(--border-glass); backdrop-filter: blur(10px); padding: 2rem; border-radius: 1rem; border-left: 4px solid var(--primary-color); display:flex; flex-direction:column; gap:0.5rem; text-align: left;';
+    card.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+          <h4 style="margin:0; font-size:1.25rem; color:#fff; font-weight:700;">${aviso.title}</h4>
+          <span style="font-size:0.85rem; color:var(--text-orange); font-weight:700;">${aviso.date}</span>
+      </div>
+      <p style="margin:0; color:var(--text-muted); font-size:0.95rem; line-height:1.6;">${aviso.content}</p>
+    `;
+    container.appendChild(card);
+  });
+}
+
+// Open User Profile Modal to edit name, phone, birthdate and upload profile pic
+function openUserProfileModal() {
+  const currentUser = JSON.parse(localStorage.getItem('sonoraCurrentUser'));
+  if (!currentUser) return;
+
+  // Create modal container if it doesn't exist
+  let modal = document.getElementById('user-profile-modal-container');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'user-profile-modal-container';
+    modal.className = 'admin-modal';
+    document.body.appendChild(modal);
+  }
+
+  const avatarUrl = currentUser.profilePic || 'img/avatar_placeholder.svg';
+
+  modal.innerHTML = `
+    <div class="admin-modal-content" style="max-width: 480px;">
+        <h3 style="color:#d95a11; margin-bottom: 1.5rem; font-weight:800;">Meu Perfil</h3>
+        <form id="user-profile-form" class="styled-form">
+            <div style="display:flex; flex-direction:column; align-items:center; gap:1rem; margin-bottom:1.5rem;">
+                <div style="width:90px; height:90px; border-radius:50%; overflow:hidden; border:2.5px solid var(--primary-color); box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+                    <img src="${avatarUrl}" alt="Foto de Perfil" id="profile-modal-avatar-preview" style="width:100%; height:100%; object-fit:cover;" onerror="this.src='img/avatar_placeholder.svg';" />
+                </div>
+                <input type="file" id="profile-upload-file" accept="image/*" style="display:none;" />
+                <button type="button" class="button" onclick="document.getElementById('profile-upload-file').click()" style="padding: 0.4rem 1rem; font-size:0.85rem; border:none; cursor:pointer;">Alterar Foto</button>
+                <span id="profile-upload-status" style="font-size:0.8rem; color:var(--text-muted);"></span>
+            </div>
+            
+            <div class="form-group">
+                <label for="profile-name">Nome Completo</label>
+                <input type="text" id="profile-name" value="${currentUser.name}" required />
+            </div>
+            <div class="form-group">
+                <label for="profile-phone">Telefone / Celular</label>
+                <input type="text" id="profile-phone" value="${currentUser.phone || ''}" required />
+            </div>
+            <div class="form-group">
+                <label for="profile-birthdate">Data de Nascimento</label>
+                <input type="date" id="profile-birthdate" value="${currentUser.birthdate || ''}" required />
+            </div>
+            
+            <div style="display:flex; justify-content:flex-end; gap: 1rem; margin-top: 1.5rem;">
+                <button type="button" class="button" id="close-profile-modal-btn" style="background:#333; border:none; cursor:pointer;">Cancelar</button>
+                <button type="submit" class="button" style="border:none; cursor:pointer;">Salvar Alterações</button>
+            </div>
+        </form>
+    </div>
+  `;
+
+  modal.classList.remove('hidden');
+
+  document.getElementById('close-profile-modal-btn').addEventListener('click', () => {
+    modal.classList.add('hidden');
+  });
+
+  // Handle avatar upload preview
+  let selectedFile = null;
+  const fileInput = document.getElementById('profile-upload-file');
+  fileInput.addEventListener('change', function() {
+    if (this.files.length > 0) {
+      selectedFile = this.files[0];
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('profile-modal-avatar-preview').src = e.target.result;
+      };
+      reader.readAsDataURL(selectedFile);
+    }
+  });
+
+  document.getElementById('user-profile-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = document.getElementById('profile-name').value.trim();
+    const phone = document.getElementById('profile-phone').value.trim();
+    const birthdate = document.getElementById('profile-birthdate').value;
+    const statusSpan = document.getElementById('profile-upload-status');
+
+    let profilePic = currentUser.profilePic || '';
+
+    if (selectedFile) {
+      statusSpan.textContent = 'Enviando foto...';
+      const formData = new FormData();
+      formData.append('image', selectedFile);
+
+      try {
+        const uploadRes = await fetch('upload.php', {
+          method: 'POST',
+          body: formData
+        });
+        const uploadData = await uploadRes.json();
+        if (uploadData.success) {
+          profilePic = uploadData.filePath;
+          statusSpan.textContent = 'Foto enviada!';
+        } else {
+          alert('Erro ao enviar foto de perfil: ' + uploadData.message);
+          statusSpan.textContent = 'Erro no envio.';
+          return;
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Erro na conexão com o servidor.');
+        statusSpan.textContent = 'Erro de rede.';
+        return;
+      }
+    }
+
+    // Save profile update to auth.php
+    fetch('auth.php?action=update_profile', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: currentUser.username,
+        name,
+        phone,
+        birthdate,
+        profilePic
+      })
+    })
+    .then(res => res.json())
+    .then(resData => {
+      if (resData.success) {
+        currentUser.name = name;
+        currentUser.phone = phone;
+        currentUser.birthdate = birthdate;
+        currentUser.profilePic = profilePic;
+        localStorage.setItem('sonoraCurrentUser', JSON.stringify(currentUser));
+        alert('Perfil atualizado com sucesso!');
+        modal.classList.add('hidden');
+        window.location.reload();
+      } else {
+        alert('Erro ao atualizar perfil: ' + resData.message);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert('Erro de conexão ao salvar alterações.');
+    });
+  });
 }

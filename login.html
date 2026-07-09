@@ -89,6 +89,10 @@
                         <input type="date" id="reg-birthdate" required />
                     </div>
                     <div class="form-group">
+                        <label for="reg-phone">Telefone / Celular</label>
+                        <input type="text" id="reg-phone" placeholder="Ex: 27999999999" required />
+                    </div>
+                    <div class="form-group">
                         <label for="reg-password">Criar Senha</label>
                         <input type="password" id="reg-password" placeholder="Sua senha segura" required />
                     </div>
@@ -171,6 +175,7 @@
             const username = document.getElementById('reg-username').value.trim();
             const cpf = document.getElementById('reg-cpf').value.trim();
             const birthdate = document.getElementById('reg-birthdate').value;
+            const phone = document.getElementById('reg-phone').value.trim();
             const password = document.getElementById('reg-password').value;
             const role = 'cliente'; // Only 'cliente' accounts can be registered publicly
 
@@ -179,7 +184,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ name, username, cpf, birthdate, password, role })
+                body: JSON.stringify({ name, username, cpf, birthdate, phone, password, role })
             })
             .then(response => response.json())
             .then(data => {

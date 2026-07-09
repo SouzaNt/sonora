@@ -70,10 +70,11 @@ if ($action === 'register') {
     $username = isset($input['username']) ? trim($input['username']) : '';
     $cpf = isset($input['cpf']) ? trim($input['cpf']) : '';
     $birthdate = isset($input['birthdate']) ? trim($input['birthdate']) : '';
+    $phone = isset($input['phone']) ? trim($input['phone']) : '';
     $password = isset($input['password']) ? $input['password'] : '';
     $role = 'cliente'; // Force 'cliente' to prevent adm creation or unauthorized roles
 
-    if (empty($name) || empty($username) || empty($cpf) || empty($birthdate) || empty($password)) {
+    if (empty($name) || empty($username) || empty($cpf) || empty($birthdate) || empty($phone) || empty($password)) {
         echo json_encode(['success' => false, 'message' => 'Todos os campos são obrigatórios.']);
         exit;
     }
@@ -95,8 +96,10 @@ if ($action === 'register') {
         'username' => $username,
         'cpf' => $cpf,
         'birthdate' => $birthdate,
+        'phone' => $phone,
         'password' => $password,
-        'role' => $role
+        'role' => $role,
+        'profilePic' => ''
     ];
 
     $users[] = $newUser;
@@ -124,7 +127,9 @@ if ($action === 'login') {
                     'username' => $u['username'],
                     'role' => $u['role'],
                     'cpf' => $u['cpf'],
-                    'birthdate' => $u['birthdate']
+                    'birthdate' => $u['birthdate'],
+                    'phone' => isset($u['phone']) ? $u['phone'] : '',
+                    'profilePic' => isset($u['profilePic']) ? $u['profilePic'] : ''
                 ]
             ]);
             exit;
@@ -132,6 +137,40 @@ if ($action === 'login') {
     }
 
     echo json_encode(['success' => false, 'message' => 'Usuário ou senha incorretos.']);
+    exit;
+}
+
+if ($action === 'update_profile') {
+    $username = isset($input['username']) ? trim($input['username']) : '';
+    $name = isset($input['name']) ? trim($input['name']) : '';
+    $phone = isset($input['phone']) ? trim($input['phone']) : '';
+    $birthdate = isset($input['birthdate']) ? trim($input['birthdate']) : '';
+    $profilePic = isset($input['profilePic']) ? trim($input['profilePic']) : '';
+
+    if (empty($username) || empty($name)) {
+        echo json_encode(['success' => false, 'message' => 'Nome e usuário são obrigatórios.']);
+        exit;
+    }
+
+    $found = false;
+    foreach ($users as &$u) {
+        if (strtolower($u['username']) === strtolower($username)) {
+            $u['name'] = $name;
+            $u['phone'] = $phone;
+            $u['birthdate'] = $birthdate;
+            $u['profilePic'] = $profilePic;
+            $found = true;
+            break;
+        }
+    }
+    unset($u);
+
+    if ($found) {
+        file_put_contents($jsonFile, json_encode($users, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+        echo json_encode(['success' => true, 'message' => 'Perfil atualizado com sucesso.']);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Usuário não encontrado.']);
+    }
     exit;
 }
 
