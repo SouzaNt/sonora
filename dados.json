@@ -156,6 +156,23 @@
                     "desc": "Introdução a instrumentos de sopro e percussão leve."
                 }
             ]
+        },
+        {
+            "id": "natan",
+            "name": "Natan",
+            "fullName": "ad",
+            "avatar": "🎙️",
+            "instrument": "as",
+            "tag": "ad",
+            "bio": "ad",
+            "quote": "ad",
+            "specialties": [
+                {
+                    "title": "da",
+                    "desc": ""
+                }
+            ],
+            "imgUrl": ""
         }
     ],
     "enrollments": []

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Acessar Conta - Sonora Educação Musical</title>
     <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -49,13 +49,13 @@
     <!-- Login/Register Area -->
     <section class="section">
         <div class="container" style="max-width: 500px;">
-            <div class="auth-tabs" style="display: flex; margin-bottom: 2rem; border-bottom: 2px solid rgba(255,255,255,0.05);">
-                <button id="tab-login-btn" class="auth-tab-btn active" style="flex: 1; background: none; border: none; padding: 1rem; color: #fff; font-family: inherit; font-size: 1.1rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid #d95a11; transition: all 0.3s ease;">Entrar</button>
-                <button id="tab-register-btn" class="auth-tab-btn" style="flex: 1; background: none; border: none; padding: 1rem; color: #a0a0a0; font-family: inherit; font-size: 1.1rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.3s ease;">Cadastrar-se</button>
+            <div class="auth-tabs">
+                <button id="tab-login-btn" class="auth-tab-btn active">Entrar</button>
+                <button id="tab-register-btn" class="auth-tab-btn">Cadastrar-se</button>
             </div>
 
             <!-- Login Form -->
-            <div id="login-form-container" class="contact-form-container" style="padding: 2rem;">
+            <div id="login-form-container" class="contact-form-container">
                 <form id="login-form" class="styled-form">
                     <div class="form-group">
                         <label for="login-username">Usuário</label>
@@ -65,12 +65,12 @@
                         <label for="login-password">Senha</label>
                         <input type="password" id="login-password" placeholder="Sua senha" required />
                     </div>
-                    <button type="submit" class="button form-submit-btn" style="margin-top: 1rem;">Entrar na Conta</button>
+                    <button type="submit" class="button form-submit-btn">Entrar na Conta</button>
                 </form>
             </div>
 
             <!-- Register Form -->
-            <div id="register-form-container" class="contact-form-container hidden" style="padding: 2rem;">
+            <div id="register-form-container" class="contact-form-container hidden">
                 <form id="register-form" class="styled-form">
                     <div class="form-group">
                         <label for="reg-name">Nome Completo</label>
@@ -92,7 +92,7 @@
                         <label for="reg-password">Criar Senha</label>
                         <input type="password" id="reg-password" placeholder="Sua senha segura" required />
                     </div>
-                    <button type="submit" class="button form-submit-btn" style="margin-top: 1rem;">Criar Minha Conta</button>
+                    <button type="submit" class="button form-submit-btn">Criar Minha Conta</button>
                 </form>
             </div>
         </div>
@@ -117,26 +117,14 @@
 
         tabLoginBtn.addEventListener('click', () => {
             tabLoginBtn.classList.add('active');
-            tabLoginBtn.style.color = '#fff';
-            tabLoginBtn.style.borderBottomColor = '#d95a11';
-            
             tabRegisterBtn.classList.remove('active');
-            tabRegisterBtn.style.color = '#a0a0a0';
-            tabRegisterBtn.style.borderBottomColor = 'transparent';
-
             loginContainer.classList.remove('hidden');
             registerContainer.classList.add('hidden');
         });
 
         tabRegisterBtn.addEventListener('click', () => {
             tabRegisterBtn.classList.add('active');
-            tabRegisterBtn.style.color = '#fff';
-            tabRegisterBtn.style.borderBottomColor = '#d95a11';
-            
             tabLoginBtn.classList.remove('active');
-            tabLoginBtn.style.color = '#a0a0a0';
-            tabLoginBtn.style.borderBottomColor = 'transparent';
-
             registerContainer.classList.remove('hidden');
             loginContainer.classList.add('hidden');
         });
