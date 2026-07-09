@@ -346,11 +346,29 @@
             });
         });
 
-        // Load and render dynamic admin tables
+        let sonoraData = null;
+
+        // Load and render dynamic admin tables from backend JSON
         function refreshAdminData() {
-            const data = JSON.parse(localStorage.getItem('sonoraData'));
-            if (!data) return;
-            
+            fetch('data.php')
+            .then(res => res.json())
+            .then(data => {
+                sonoraData = data;
+                renderAdminUI(data);
+            })
+            .catch(err => {
+                console.error(err);
+                // Fallback to localStorage if server is offline
+                const data = JSON.parse(localStorage.getItem('sonoraData'));
+                if (data) {
+                    sonoraData = data;
+                    renderAdminUI(data);
+                }
+            });
+        }
+
+        // Render function
+        function renderAdminUI(data) {
             // 1. Render Enrollments
             const enrollmentsBody = document.getElementById('enrollments-table-body');
             enrollmentsBody.innerHTML = '';
@@ -428,55 +446,88 @@
             }
         }
 
+        // Save data helper function
+        function saveAdminData(data) {
+            fetch('data.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(resData => {
+                if (resData.success) {
+                    refreshAdminData();
+                } else {
+                    alert('Erro ao salvar os dados no servidor: ' + (resData.message || 'Erro desconhecido'));
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                // Local fallback
+                localStorage.setItem('sonoraData', JSON.stringify(data));
+                refreshAdminData();
+            });
+        }
+
         // Action functions: delete enrollment
         window.deleteEnrollment = function(index) {
             if (confirm('Tem certeza que deseja remover esta matrícula?')) {
-                const data = JSON.parse(localStorage.getItem('sonoraData'));
-                data.enrollments.splice(index, 1);
-                localStorage.setItem('sonoraData', JSON.stringify(data));
-                refreshAdminData();
+                sonoraData.enrollments.splice(index, 1);
+                saveAdminData(sonoraData);
             }
         };
 
         // Delete Course
         window.deleteCourse = function(index) {
             if (confirm('Deseja mesmo excluir este curso? Ele sumirá de todas as páginas.')) {
-                const data = JSON.parse(localStorage.getItem('sonoraData'));
-                data.courses.splice(index, 1);
-                localStorage.setItem('sonoraData', JSON.stringify(data));
-                refreshAdminData();
+                sonoraData.courses.splice(index, 1);
+                saveAdminData(sonoraData);
             }
         };
 
         // Delete Teacher
         window.deleteTeacher = function(index) {
             if (confirm('Deseja mesmo excluir este professor? Ele sumirá da página de professores.')) {
-                const data = JSON.parse(localStorage.getItem('sonoraData'));
-                data.teachers.splice(index, 1);
-                localStorage.setItem('sonoraData', JSON.stringify(data));
-                refreshAdminData();
+                sonoraData.teachers.splice(index, 1);
+                saveAdminData(sonoraData);
             }
         };
 
         // Form Submission: Site Texts
         document.getElementById('texts-edit-form').addEventListener('submit', (e) => {
             e.preventDefault();
-            const data = JSON.parse(localStorage.getItem('sonoraData'));
-            data.texts.heroTitle = document.getElementById('txt-hero-title').value;
-            data.texts.heroSubtitle = document.getElementById('txt-hero-subtitle').value;
-            data.texts.aboutTitle = document.getElementById('txt-about-title').value;
-            data.texts.aboutText1 = document.getElementById('txt-about-text1').value;
-            data.texts.aboutText2 = document.getElementById('txt-about-text2').value;
-            data.texts.aboutText3 = document.getElementById('txt-about-text3').value;
-            data.texts.address = document.getElementById('txt-contact-address').value;
-            data.texts.contactHours = document.getElementById('txt-contact-hours').value;
-            data.texts.whatsappLink = document.getElementById('txt-whatsapp-link').value;
-            data.texts.instagram = document.getElementById('txt-instagram-label').value;
-            data.texts.instagramLink = document.getElementById('txt-instagram-link').value;
+            sonoraData.texts.heroTitle = document.getElementById('txt-hero-title').value;
+            sonoraData.texts.heroSubtitle = document.getElementById('txt-hero-subtitle').value;
+            sonoraData.texts.aboutTitle = document.getElementById('txt-about-title').value;
+            sonoraData.texts.aboutText1 = document.getElementById('txt-about-text1').value;
+            sonoraData.texts.aboutText2 = document.getElementById('txt-about-text2').value;
+            sonoraData.texts.aboutText3 = document.getElementById('txt-about-text3').value;
+            sonoraData.texts.address = document.getElementById('txt-contact-address').value;
+            sonoraData.texts.contactHours = document.getElementById('txt-contact-hours').value;
+            sonoraData.texts.whatsappLink = document.getElementById('txt-whatsapp-link').value;
+            sonoraData.texts.instagram = document.getElementById('txt-instagram-label').value;
+            sonoraData.texts.instagramLink = document.getElementById('txt-instagram-link').value;
 
-            localStorage.setItem('sonoraData', JSON.stringify(data));
-            alert('Configurações salvas com sucesso!');
-            window.location.reload();
+            fetch('data.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(sonoraData)
+            })
+            .then(res => res.json())
+            .then(resData => {
+                if (resData.success) {
+                    alert('Configurações salvas com sucesso!');
+                    window.location.reload();
+                } else {
+                    alert('Erro ao salvar as configurações.');
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                localStorage.setItem('sonoraData', JSON.stringify(sonoraData));
+                alert('Configurações salvas localmente.');
+                window.location.reload();
+            });
         });
 
         // Modals management
@@ -489,9 +540,8 @@
 
         // Add/Edit Course Modal
         window.openCourseModal = function(index = null) {
-            const data = JSON.parse(localStorage.getItem('sonoraData'));
             const isEdit = index !== null;
-            const course = isEdit ? data.courses[index] : { icon: '🎸', title: '', desc: '', audience: '', modality: '', topics: [] };
+            const course = isEdit ? sonoraData.courses[index] : { icon: '🎸', title: '', desc: '', audience: '', modality: '', topics: [] };
 
             modalContainer.innerHTML = `
                 <div class="admin-modal-content">
@@ -548,23 +598,40 @@
                 const newCourse = { id, icon, title, desc, audience, modality, topics };
 
                 if (isEdit) {
-                    data.courses[index] = newCourse;
+                    sonoraData.courses[index] = newCourse;
                 } else {
-                    data.courses.push(newCourse);
+                    sonoraData.courses.push(newCourse);
                 }
 
-                localStorage.setItem('sonoraData', JSON.stringify(data));
-                alert('Curso salvo com sucesso!');
-                closeModal();
-                refreshAdminData();
+                fetch('data.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(sonoraData)
+                })
+                .then(res => res.json())
+                .then(resData => {
+                    if (resData.success) {
+                        alert('Curso salvo com sucesso!');
+                        closeModal();
+                        refreshAdminData();
+                    } else {
+                        alert('Erro ao salvar curso no servidor.');
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    localStorage.setItem('sonoraData', JSON.stringify(sonoraData));
+                    alert('Curso salvo localmente.');
+                    closeModal();
+                    refreshAdminData();
+                });
             });
         };
 
         // Add/Edit Teacher Modal
         window.openTeacherModal = function(index = null) {
-            const data = JSON.parse(localStorage.getItem('sonoraData'));
             const isEdit = index !== null;
-            const teacher = isEdit ? data.teachers[index] : { avatar: '🎙️', name: '', fullName: '', tag: '', instrument: '', bio: '', quote: '', specialties: [] };
+            const teacher = isEdit ? sonoraData.teachers[index] : { avatar: '🎙️', name: '', fullName: '', tag: '', instrument: '', bio: '', quote: '', specialties: [], imgUrl: '' };
 
             let specTexts = '';
             if (teacher.specialties) {
@@ -600,6 +667,11 @@
                             <input type="text" id="m-teacher-tag" value="${teacher.tag}" placeholder="Ex: Professora de Teclado" required />
                         </div>
                         <div class="form-group">
+                            <label for="m-teacher-photo">Foto do Professor</label>
+                            <input type="file" id="m-teacher-photo" accept="image/*" style="background:#252525; color:#fff; border:1px solid rgba(255,255,255,0.1); padding:0.5rem; border-radius:0.5rem; width:100%;" />
+                            <span id="m-teacher-photo-status" style="font-size:0.85rem; color:#a0a0a0; margin-top:0.2rem; display:block;">Caminho atual: ${teacher.imgUrl || 'Nenhum'}</span>
+                        </div>
+                        <div class="form-group">
                             <label for="m-teacher-bio">Biografia do Professor</label>
                             <textarea id="m-teacher-bio" rows="3" required>${teacher.bio}</textarea>
                         </div>
@@ -620,7 +692,7 @@
             `;
             modalContainer.classList.remove('hidden');
 
-            document.getElementById('modal-teacher-form').addEventListener('submit', (e) => {
+            document.getElementById('modal-teacher-form').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const name = document.getElementById('m-teacher-name').value.trim();
                 const fullName = document.getElementById('m-teacher-fullname').value.trim();
@@ -645,18 +717,69 @@
 
                 const id = isEdit ? teacher.id : name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '-');
 
-                const newTeacher = { id, name, fullName, avatar, instrument, tag, bio, quote, specialties, imgUrl: isEdit ? teacher.imgUrl : '' };
+                let imgUrl = teacher.imgUrl || '';
 
-                if (isEdit) {
-                    data.teachers[index] = newTeacher;
-                } else {
-                    data.teachers.push(newTeacher);
+                // Handle file upload if a new file was selected
+                const fileInput = document.getElementById('m-teacher-photo');
+                const statusSpan = document.getElementById('m-teacher-photo-status');
+                if (fileInput && fileInput.files.length > 0) {
+                    statusSpan.textContent = 'Enviando imagem para o servidor...';
+                    
+                    const formData = new FormData();
+                    formData.append('image', fileInput.files[0]);
+
+                    try {
+                        const uploadRes = await fetch('upload.php', {
+                            method: 'POST',
+                            body: formData
+                        });
+                        const uploadData = await uploadRes.json();
+                        if (uploadData.success) {
+                            imgUrl = uploadData.filePath;
+                            statusSpan.textContent = 'Imagem enviada com sucesso!';
+                        } else {
+                            alert('Erro ao enviar imagem: ' + uploadData.message);
+                            statusSpan.textContent = 'Erro ao enviar.';
+                            return;
+                        }
+                    } catch (err) {
+                        console.error(err);
+                        alert('Erro de rede ao enviar imagem para o servidor.');
+                        statusSpan.textContent = 'Erro de conexão no upload.';
+                        return;
+                    }
                 }
 
-                localStorage.setItem('sonoraData', JSON.stringify(data));
-                alert('Professor salvo com sucesso!');
-                closeModal();
-                refreshAdminData();
+                const newTeacher = { id, name, fullName, avatar, instrument, tag, bio, quote, specialties, imgUrl };
+
+                if (isEdit) {
+                    sonoraData.teachers[index] = newTeacher;
+                } else {
+                    sonoraData.teachers.push(newTeacher);
+                }
+
+                fetch('data.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(sonoraData)
+                })
+                .then(res => res.json())
+                .then(resData => {
+                    if (resData.success) {
+                        alert('Professor salvo com sucesso!');
+                        closeModal();
+                        refreshAdminData();
+                    } else {
+                        alert('Erro ao salvar professor no servidor.');
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    localStorage.setItem('sonoraData', JSON.stringify(sonoraData));
+                    alert('Professor salvo localmente.');
+                    closeModal();
+                    refreshAdminData();
+                });
             });
         };
 

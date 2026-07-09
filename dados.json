@@ -1,0 +1,162 @@
+{
+    "texts": {
+        "heroTitle": "Aqui nós <span class=\"highlight\">sonhamos<\/span> o seu sonho.",
+        "heroSubtitle": "Aulas de Canto e Instrumentos Musicais em Colatina. Desperte seu talento em uma escola apaixonada por música.",
+        "aboutTitle": "Uma família unida pela música",
+        "aboutText1": "Na Sonora Educação Musical, acolhemos crianças, jovens e adultos, oferecendo um ambiente caloroso onde a paixão pela música pode florescer. Nosso objetivo é transformar o aprendizado em uma experiência memorável e inspiradora.",
+        "aboutText2": "Na Sonora Educação Musical, acolhemos crianças, jovens e adultos de forma afetuosa e humanizada. Acreditamos que o aprendizado da música vai além da técnica: trata-se de conexão, expressão pessoal e união familiar.",
+        "aboutText3": "Nossa metodologia foca no desenvolvimento individual de cada aluno, adaptando as aulas aos seus ritmos e objetivos, seja para fins profissionais ou para hobby e bem-estar.",
+        "address": "R. Henrique Beletable, 46 - Santo Antônio, Colatina - ES, 29704-065",
+        "instagram": "@sonorae.m",
+        "instagramLink": "https:\/\/instagram.com\/sonorae.m",
+        "whatsappLink": "https:\/\/api.whatsapp.com\/message\/GBODBOK3OAPBL1?autoload=1&app_absent=0&utm_source=ig",
+        "contactHours": "Segunda a Sexta: 08:00 às 20:00 | Sábado: 08:00 às 12:00"
+    },
+    "courses": [
+        {
+            "id": "canto",
+            "title": "Canto & Técnica Vocal",
+            "icon": "🎤",
+            "desc": "Domine a sua voz. Aprenda a controlar a respiração diafragmática, melhore a afinação e adquira presença de palco com acompanhamento personalizado.",
+            "topics": [
+                "Respiração e Apoio Diafragmático",
+                "Afinação e Percepção Rítmica",
+                "Fisiologia Vocal e Saúde",
+                "Expressão e Postura Cênica"
+            ],
+            "audience": "Infantil, Jovens e Adultos",
+            "modality": "Presencial (Individual \/ Grupo)"
+        },
+        {
+            "id": "violao",
+            "title": "Violão & Guitarra",
+            "icon": "🎸",
+            "desc": "Desenvolva sua musicalidade nas cordas. Das primeiras posições de acordes às técnicas refinadas de solos, improvisação e estilos diversos (MPB, Rock, Pop).",
+            "topics": [
+                "Acordes e Transições Rápidas",
+                "Ritmos, Dedilhados e Palhetadas",
+                "Escalas, Solos e Improvisação",
+                "Prática de Repertório Customizado"
+            ],
+            "audience": "A partir de 7 anos e Adultos",
+            "modality": "Presencial (Individual \/ Dupla)"
+        },
+        {
+            "id": "teclado",
+            "title": "Teclado & Piano",
+            "icon": "🎹",
+            "desc": "Compreenda a harmonia de forma visual e prática. Aprenda leitura de partitura, estruturação de acordes e desenvolva a independência das mãos.",
+            "topics": [
+                "Postura Correta e Digitação",
+                "Leitura Clave de Sol e Fá",
+                "Estruturação de Acordes e Campo Harmônico",
+                "Arranjo e Criação Musical"
+            ],
+            "audience": "Todas as idades",
+            "modality": "Presencial (Individual)"
+        }
+    ],
+    "teachers": [
+        {
+            "id": "gedeon",
+            "name": "Gedeon",
+            "fullName": "Professor Gedeon",
+            "avatar": "🎙️",
+            "imgUrl": "img\/gedeon.jpg",
+            "tag": "Professor de Canto",
+            "instrument": "Canto & Técnica Vocal",
+            "bio": "Especialista em fisiologia vocal e performance cênica, o Professor Gedeon possui anos de dedicação ao ensino musical em Colatina. Sua metodologia une o rigor técnico (respiração, afinação e dicção) a uma abordagem acolhedora e inspiradora que respeita a identidade de cada voz.",
+            "quote": "Cantar é a expressão mais pura da nossa alma. Minha missão é ajudar você a encontrar e lapidar a sua própria voz.",
+            "specialties": [
+                {
+                    "title": "Técnica Vocal",
+                    "desc": "Controle de apoio, agudos, graves e vibrato."
+                },
+                {
+                    "title": "Saúde Vocal",
+                    "desc": "Exercícios para aquecimento vocal seguro e longevidade."
+                },
+                {
+                    "title": "Expressão Corporal",
+                    "desc": "Como vencer a timidez e dominar o palco."
+                }
+            ]
+        },
+        {
+            "id": "beatriz",
+            "name": "Beatriz",
+            "fullName": "Professora Beatriz",
+            "avatar": "🎹",
+            "imgUrl": "img\/beatriz.jpg",
+            "tag": "Professora de Teclado",
+            "instrument": "Teclado & Piano",
+            "bio": "Bacharel em Piano, a Professora Beatriz ensina com paciência e foco na independência das mãos, leitura de partituras de forma descomplicada e estruturação harmônica para teclado e piano clássico ou popular.",
+            "quote": "A música clássica e moderna se encontram nas teclas. Vamos tocar com sentimento e técnica.",
+            "specialties": [
+                {
+                    "title": "Partitura",
+                    "desc": "Leitura e interpretação musical simplificada."
+                },
+                {
+                    "title": "Independência",
+                    "desc": "Exercícios de coordenação motora fina para teclado."
+                },
+                {
+                    "title": "Piano Clássico",
+                    "desc": "Postura, dedilhado e dinâmicas de expressão tradicionais."
+                }
+            ]
+        },
+        {
+            "id": "lucas",
+            "name": "Lucas",
+            "fullName": "Professor Lucas",
+            "avatar": "🎸",
+            "imgUrl": "img\/lucas.jpg",
+            "tag": "Professor de Cordas",
+            "instrument": "Violão & Guitarra",
+            "bio": "Com ampla experiência em palcos de Colatina e região, o Professor Lucas ensina violão popular, violão clássico e guitarra elétrica, focando em improvisação, solos e no repertório preferido de cada aluno.",
+            "quote": "Toda grande música começa com um acorde simples. O segredo está na dedicação.",
+            "specialties": [
+                {
+                    "title": "Improvisação",
+                    "desc": "Escalas pentatônicas, solos e formação de acordes."
+                },
+                {
+                    "title": "Ritmos",
+                    "desc": "Dedilhados, batidas e levadas para diversos estilos."
+                },
+                {
+                    "title": "Guitarra Elétrica",
+                    "desc": "Técnicas de palhetada alternada, legato e efeitos."
+                }
+            ]
+        },
+        {
+            "id": "sara",
+            "name": "Sara",
+            "fullName": "Professora Sara",
+            "avatar": "🥁",
+            "imgUrl": "img\/sara.jpg",
+            "tag": "Professora Infantil",
+            "instrument": "Musicalização Infantil & Bateria",
+            "bio": "Pedagoga e especialista em educação musical, a Professora Sara conduz atividades lúdicas de iniciação ao ritmo, canto coletivo e reconhecimento de instrumentos para crianças de todas as idades.",
+            "quote": "A música é o primeiro idioma da imaginação da criança. Vamos brincar de fazer som!",
+            "specialties": [
+                {
+                    "title": "Jogos Musicais",
+                    "desc": "Brincadeiras sonoras que ensinam teoria e ritmo de forma lúdica."
+                },
+                {
+                    "title": "Iniciação Rítmica",
+                    "desc": "Desenvolvimento motor e percepção musical primária."
+                },
+                {
+                    "title": "Flauta Doce & Percussão",
+                    "desc": "Introdução a instrumentos de sopro e percussão leve."
+                }
+            ]
+        }
+    ],
+    "enrollments": []
+}

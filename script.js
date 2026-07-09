@@ -131,17 +131,28 @@ const defaultSiteData = {
   ]
 };
 
-// Auto initialize database if not present
-if (!localStorage.getItem('sonoraData')) {
-  localStorage.setItem('sonoraData', JSON.stringify(defaultSiteData));
-}
-
 document.addEventListener('DOMContentLoaded', function () {
   const header = document.getElementById('site-header');
   const headerHeight = header ? header.offsetHeight : 80;
 
-  // Render all dynamic elements
-  loadDynamicContent();
+  // Fetch data from PHP backend
+  fetch('data.php')
+    .then(response => response.json())
+    .then(data => {
+      window.sonoraData = data;
+      loadDynamicContent(data);
+    })
+    .catch(err => {
+      console.error('Erro ao carregar dados do servidor:', err);
+      // Fallback to default mock data if PHP is not running
+      let localData = JSON.parse(localStorage.getItem('sonoraData'));
+      if (!localData) {
+        localData = defaultSiteData;
+        localStorage.setItem('sonoraData', JSON.stringify(localData));
+      }
+      window.sonoraData = localData;
+      loadDynamicContent(localData);
+    });
 
   // Header dynamic opacity on scroll
   window.addEventListener('scroll', function () {
@@ -269,11 +280,11 @@ function updateHeaderAuth() {
 }
 
 // Render dynamic homepage courses block
-function renderHomepageCourses() {
+function renderHomepageCourses(data) {
   const cardsContainer = document.querySelector('#cursos .cards');
   if (!cardsContainer) return;
 
-  const data = JSON.parse(localStorage.getItem('sonoraData'));
+  if (!data) data = window.sonoraData;
   if (!data || !data.courses) return;
 
   cardsContainer.innerHTML = '';
@@ -289,15 +300,15 @@ function renderHomepageCourses() {
     cardsContainer.appendChild(card);
   });
 
-  bindEnrollButtons();
+  bindEnrollButtons(data);
 }
 
 // Render dynamic course detailed grid in cursos.html
-function renderDetailedCourses() {
+function renderDetailedCourses(data) {
   const container = document.querySelector('.courses-detailed-grid');
   if (!container) return;
 
-  const data = JSON.parse(localStorage.getItem('sonoraData'));
+  if (!data) data = window.sonoraData;
   if (!data || !data.courses) return;
 
   container.innerHTML = '';
@@ -328,16 +339,16 @@ function renderDetailedCourses() {
     container.appendChild(card);
   });
 
-  bindEnrollButtons();
+  bindEnrollButtons(data);
 }
 
 // Render dynamic teachers in professores.html
-function renderTeachersPage() {
+function renderTeachersPage(data) {
   const sidebarContainer = document.querySelector('.teacher-small-cards');
   const detailsPanel = document.querySelector('.teacher-details-panel');
   if (!sidebarContainer || !detailsPanel) return;
 
-  const data = JSON.parse(localStorage.getItem('sonoraData'));
+  if (!data) data = window.sonoraData;
   if (!data || !data.teachers) return;
 
   sidebarContainer.innerHTML = '';
@@ -432,7 +443,7 @@ function bindTeacherSwitcher() {
 }
 
 // Handle Client interactive course enrollments
-function bindEnrollButtons() {
+function bindEnrollButtons(data) {
   const enrollBtns = document.querySelectorAll('.enroll-course-btn');
   enrollBtns.forEach(btn => {
     btn.addEventListener('click', function (e) {
@@ -451,7 +462,7 @@ function bindEnrollButtons() {
         return;
       }
 
-      const data = JSON.parse(localStorage.getItem('sonoraData'));
+      if (!data) data = window.sonoraData;
       const alreadyEnrolled = data.enrollments.some(enc => enc.username === currentUser.username && enc.courseTitle === courseTitle);
 
       if (alreadyEnrolled) {
@@ -466,16 +477,33 @@ function bindEnrollButtons() {
         courseTitle: courseTitle
       });
 
-      localStorage.setItem('sonoraData', JSON.stringify(data));
-      alert(`Matrícula solicitada com sucesso no curso: ${courseTitle}!`);
-      window.open(data.texts.whatsappLink, '_blank');
+      fetch('data.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(res => res.json())
+      .then(resData => {
+        if (resData.success) {
+          alert(`Matrícula solicitada com sucesso no curso: ${courseTitle}!`);
+          window.open(data.texts.whatsappLink, '_blank');
+        } else {
+          alert('Erro ao enviar matrícula para o servidor.');
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        localStorage.setItem('sonoraData', JSON.stringify(data));
+        alert(`Matrícula solicitada com sucesso no curso (salvo localmente): ${courseTitle}!`);
+        window.open(data.texts.whatsappLink, '_blank');
+      });
     });
   });
 }
 
 // Read site texts/data and inject it into the DOM
-function loadDynamicContent() {
-  const data = JSON.parse(localStorage.getItem('sonoraData'));
+function loadDynamicContent(data) {
+  if (!data) data = window.sonoraData;
   if (!data) return;
 
   // Update authentication links in headers
@@ -529,7 +557,7 @@ function loadDynamicContent() {
   }
 
   // Render course & teacher items
-  renderHomepageCourses();
-  renderDetailedCourses();
-  renderTeachersPage();
+  renderHomepageCourses(data);
+  renderDetailedCourses(data);
+  renderTeachersPage(data);
 }

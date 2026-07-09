@@ -20,6 +20,38 @@ if (!file_exists($jsonFile)) {
             "birthdate" => "2000-01-01",
             "password" => "admin",
             "role" => "adm"
+        ],
+        [
+            "username" => "gedeon",
+            "name" => "Gedeon",
+            "cpf" => "111.111.111-11",
+            "birthdate" => "1980-01-01",
+            "password" => "123",
+            "role" => "professor"
+        ],
+        [
+            "username" => "beatriz",
+            "name" => "Beatriz",
+            "cpf" => "222.222.222-22",
+            "birthdate" => "1985-02-02",
+            "password" => "123",
+            "role" => "professor"
+        ],
+        [
+            "username" => "lucas",
+            "name" => "Lucas",
+            "cpf" => "333.333.333-33",
+            "birthdate" => "1990-03-03",
+            "password" => "123",
+            "role" => "professor"
+        ],
+        [
+            "username" => "sara",
+            "name" => "Sara",
+            "cpf" => "444.444.444-44",
+            "birthdate" => "1995-04-04",
+            "password" => "123",
+            "role" => "professor"
         ]
     ];
     file_put_contents($jsonFile, json_encode($defaultUsers, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
@@ -39,7 +71,7 @@ if ($action === 'register') {
     $cpf = isset($input['cpf']) ? trim($input['cpf']) : '';
     $birthdate = isset($input['birthdate']) ? trim($input['birthdate']) : '';
     $password = isset($input['password']) ? $input['password'] : '';
-    $role = isset($input['role']) ? trim($input['role']) : 'cliente';
+    $role = 'cliente'; // Force 'cliente' to prevent adm creation or unauthorized roles
 
     if (empty($name) || empty($username) || empty($cpf) || empty($birthdate) || empty($password)) {
         echo json_encode(['success' => false, 'message' => 'Todos os campos são obrigatórios.']);
