@@ -81,8 +81,12 @@
                         <input type="text" id="reg-username" placeholder="Ex: joaosilva" required />
                     </div>
                     <div class="form-group">
-                        <label for="reg-phone">Telefone / WhatsApp</label>
-                        <input type="tel" id="reg-phone" placeholder="Ex: (27) 99999-9999" required />
+                        <label for="reg-cpf">CPF</label>
+                        <input type="text" id="reg-cpf" placeholder="000.000.000-00" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-birthdate">Data de Nascimento</label>
+                        <input type="date" id="reg-birthdate" required />
                     </div>
                     <div class="form-group">
                         <label for="reg-password">Criar Senha</label>
@@ -153,53 +157,62 @@
             const username = document.getElementById('login-username').value.trim();
             const password = document.getElementById('login-password').value;
 
-            const data = JSON.parse(localStorage.getItem('sonoraData'));
-            if (!data || !data.users) {
-                alert('Erro ao carregar os dados. Recarregue a página.');
-                return;
-            }
-            const user = data.users.find(u => u.username.toLowerCase() === username.toLowerCase() && u.password === password);
-
-            if (user) {
-                localStorage.setItem('sonoraCurrentUser', JSON.stringify(user));
-                alert(`Bem-vindo, ${user.name}!`);
-                if (user.role === 'adm') {
-                    window.location.href = 'admin.html';
+            fetch('auth.php?action=login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    localStorage.setItem('sonoraCurrentUser', JSON.stringify(data.user));
+                    alert(`Bem-vindo, ${data.user.name}!`);
+                    if (data.user.role === 'adm') {
+                        window.location.href = 'admin.html';
+                    } else {
+                        window.location.href = 'index.html';
+                    }
                 } else {
-                    window.location.href = 'index.html';
+                    alert(data.message || 'Usuário ou senha incorretos.');
                 }
-            } else {
-                alert('Usuário ou senha incorretos.');
-            }
+            })
+            .catch(err => {
+                console.error(err);
+                alert('Erro ao processar login no servidor. Verifique se o XAMPP está rodando e acesse via http://localhost/...');
+            });
         });
 
         registerForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const name = document.getElementById('reg-name').value.trim();
             const username = document.getElementById('reg-username').value.trim();
-            const phone = document.getElementById('reg-phone').value.trim();
+            const cpf = document.getElementById('reg-cpf').value.trim();
+            const birthdate = document.getElementById('reg-birthdate').value;
             const password = document.getElementById('reg-password').value;
             const role = document.getElementById('reg-role').value;
 
-            const data = JSON.parse(localStorage.getItem('sonoraData'));
-            if (!data || !data.users) {
-                alert('Erro ao carregar os dados. Recarregue a página.');
-                return;
-            }
-
-            // Check if username already exists
-            const userExists = data.users.some(u => u.username.toLowerCase() === username.toLowerCase());
-            if (userExists) {
-                alert('Nome de usuário já cadastrado. Por favor, escolha outro.');
-                return;
-            }
-
-            const newUser = { name, username, phone, password, role };
-            data.users.push(newUser);
-            localStorage.setItem('sonoraData', JSON.stringify(data));
-
-            alert('Conta criada com sucesso! Faça login para continuar.');
-            tabLoginBtn.click();
+            fetch('auth.php?action=register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name, username, cpf, birthdate, password, role })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Conta criada com sucesso! Faça login para continuar.');
+                    tabLoginBtn.click();
+                } else {
+                    alert(data.message || 'Erro ao realizar o cadastro.');
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert('Erro ao processar cadastro no servidor. Verifique se o XAMPP está rodando.');
+            });
         });
     </script>
 </body>

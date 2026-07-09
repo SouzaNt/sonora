@@ -246,13 +246,13 @@ function updateHeaderAuth() {
       }
     }
   } else {
-    authLi.innerHTML = `<a href="login.html">Login</a>`;
+    authLi.innerHTML = ''; // Hide regular text link to avoid redundancy with the main button
     if (ctaDiv) {
-      ctaDiv.innerHTML = `<a href="https://api.whatsapp.com/message/GBODBOK3OAPBL1?autoload=1&app_absent=0&utm_source=ig" class="button enroll-btn" target="_blank" rel="noopener">Matricule‑se</a>`;
+      ctaDiv.innerHTML = `<a href="login.html" class="button enroll-btn">Entrar</a>`;
     }
     const mobileCta = mobileNavMenu ? mobileNavMenu.querySelector('.cta-mobile') : null;
     if (mobileCta) {
-      mobileCta.innerHTML = `<a href="https://api.whatsapp.com/message/GBODBOK3OAPBL1?autoload=1&app_absent=0&utm_source=ig" class="button enroll-btn" target="_blank" rel="noopener">Matricule‑se</a>`;
+      mobileCta.innerHTML = `<a href="login.html" class="button enroll-btn">Entrar</a>`;
     }
   }
 
