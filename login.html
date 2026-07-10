@@ -41,19 +41,14 @@
     <!-- Subpage Hero -->
     <section class="subpage-hero">
         <div class="container">
-            <h1>Sua Conta</h1>
-            <p class="subtitle">Acesse o painel ou crie sua conta para se matricular.</p>
+            <h1>Acesso Administrativo</h1>
+            <p class="subtitle">Faça login com suas credenciais para gerenciar o painel.</p>
         </div>
     </section>
 
-    <!-- Login/Register Area -->
+    <!-- Login Area -->
     <section class="section">
-        <div class="container" style="max-width: 500px;">
-            <div class="auth-tabs">
-                <button id="tab-login-btn" class="auth-tab-btn active">Entrar</button>
-                <button id="tab-register-btn" class="auth-tab-btn">Cadastrar-se</button>
-            </div>
-
+        <div class="container" style="max-width: 450px;">
             <!-- Login Form -->
             <div id="login-form-container" class="contact-form-container">
                 <form id="login-form" class="styled-form">
@@ -65,38 +60,7 @@
                         <label for="login-password">Senha</label>
                         <input type="password" id="login-password" placeholder="Sua senha" required />
                     </div>
-                    <button type="submit" class="button form-submit-btn">Entrar na Conta</button>
-                </form>
-            </div>
-
-            <!-- Register Form -->
-            <div id="register-form-container" class="contact-form-container hidden">
-                <form id="register-form" class="styled-form">
-                    <div class="form-group">
-                        <label for="reg-name">Nome Completo</label>
-                        <input type="text" id="reg-name" placeholder="Ex: João da Silva" required />
-                    </div>
-                    <div class="form-group">
-                        <label for="reg-username">Nome de Usuário</label>
-                        <input type="text" id="reg-username" placeholder="Ex: joaosilva" required />
-                    </div>
-                    <div class="form-group">
-                        <label for="reg-cpf">CPF</label>
-                        <input type="text" id="reg-cpf" placeholder="000.000.000-00" required />
-                    </div>
-                    <div class="form-group">
-                        <label for="reg-birthdate">Data de Nascimento</label>
-                        <input type="date" id="reg-birthdate" required />
-                    </div>
-                    <div class="form-group">
-                        <label for="reg-phone">Telefone / Celular</label>
-                        <input type="text" id="reg-phone" placeholder="Ex: 27999999999" required />
-                    </div>
-                    <div class="form-group">
-                        <label for="reg-password">Criar Senha</label>
-                        <input type="password" id="reg-password" placeholder="Sua senha segura" required />
-                    </div>
-                    <button type="submit" class="button form-submit-btn">Criar Minha Conta</button>
+                    <button type="submit" class="button form-submit-btn" style="width: 100%; margin-top: 1rem;">Entrar no Painel</button>
                 </form>
             </div>
         </div>
@@ -113,29 +77,8 @@
 
     <script src="script.js"></script>
     <script>
-        // Form toggle logic
-        const tabLoginBtn = document.getElementById('tab-login-btn');
-        const tabRegisterBtn = document.getElementById('tab-register-btn');
-        const loginContainer = document.getElementById('login-form-container');
-        const registerContainer = document.getElementById('register-form-container');
-
-        tabLoginBtn.addEventListener('click', () => {
-            tabLoginBtn.classList.add('active');
-            tabRegisterBtn.classList.remove('active');
-            loginContainer.classList.remove('hidden');
-            registerContainer.classList.add('hidden');
-        });
-
-        tabRegisterBtn.addEventListener('click', () => {
-            tabRegisterBtn.classList.add('active');
-            tabLoginBtn.classList.remove('active');
-            registerContainer.classList.remove('hidden');
-            loginContainer.classList.add('hidden');
-        });
-
         // Authentication logic
         const loginForm = document.getElementById('login-form');
-        const registerForm = document.getElementById('register-form');
 
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -166,38 +109,6 @@
             .catch(err => {
                 console.error(err);
                 alert('Erro ao processar login no servidor. Verifique se o XAMPP está rodando e acesse via http://localhost/...');
-            });
-        });
-
-        registerForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const name = document.getElementById('reg-name').value.trim();
-            const username = document.getElementById('reg-username').value.trim();
-            const cpf = document.getElementById('reg-cpf').value.trim();
-            const birthdate = document.getElementById('reg-birthdate').value;
-            const phone = document.getElementById('reg-phone').value.trim();
-            const password = document.getElementById('reg-password').value;
-            const role = 'cliente'; // Only 'cliente' accounts can be registered publicly
-
-            fetch('auth.php?action=register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ name, username, cpf, birthdate, phone, password, role })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Conta criada com sucesso! Faça login para continuar.');
-                    tabLoginBtn.click();
-                } else {
-                    alert(data.message || 'Erro ao realizar o cadastro.');
-                }
-            })
-            .catch(err => {
-                console.error(err);
-                alert('Erro ao processar cadastro no servidor. Verifique se o XAMPP está rodando.');
             });
         });
     </script>

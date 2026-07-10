@@ -1,7 +1,7 @@
 {
     "texts": {
         "heroTitle": "Aqui nós <span class=\"highlight\">sonhamos<\/span> o seu sonho.",
-        "heroSubtitle": "Aulas de Canto e Instrumentos Musicais em Colatina. Desperte seu talento em uma escola apaixonada por música.",
+        "heroSubtitle": "Aulas de Música.",
         "aboutTitle": "Uma família unida pela música",
         "aboutText1": "Na Sonora Educação Musical, acolhemos crianças, jovens e adultos, oferecendo um ambiente caloroso onde a paixão pela música pode florescer. Nosso objetivo é transformar o aprendizado em uma experiência memorável e inspiradora.",
         "aboutText2": "Na Sonora Educação Musical, acolhemos crianças, jovens e adultos de forma afetuosa e humanizada. Acreditamos que o aprendizado da música vai além da técnica: trata-se de conexão, expressão pessoal e união familiar.",
@@ -12,132 +12,80 @@
         "whatsappLink": "https:\/\/api.whatsapp.com\/message\/GBODBOK3OAPBL1?autoload=1&app_absent=0&utm_source=ig",
         "contactHours": "Segunda a Sexta: 08:00 às 20:00 | Sábado: 08:00 às 12:00"
     },
-    "courses": [],
+    "courses": [
+        {
+            "id": "curso-de-guitarra",
+            "icon": "🎸",
+            "title": "Curso de Guitarra",
+            "desc": "Aqui você aprenderá do zero a tocar guitarra.",
+            "audience": "crianças",
+            "modality": "presencial (individual)",
+            "topics": [
+                "Acordes",
+                "Batidas",
+                "Músicas"
+            ]
+        }
+    ],
     "teachers": [
         {
             "id": "gedeon",
             "name": "Gedeon",
             "fullName": "Professor Gedeon",
             "avatar": "🎙️",
-            "imgUrl": "img\/gedeon.jpg",
-            "tag": "Professor de Canto",
             "instrument": "Canto & Técnica Vocal",
-            "bio": "Especialista em fisiologia vocal e performance cênica, o Professor Gedeon possui anos de dedicação ao ensino musical em Colatina. Sua metodologia une o rigor técnico (respiração, afinação e dicção) a uma abordagem acolhedora e inspiradora que respeita a identidade de cada voz.",
+            "tag": "Professor de Canto",
+            "bio": "Formado em #####\nTrabalhando na Área a 12 anos \netc",
             "quote": "Cantar é a expressão mais pura da nossa alma. Minha missão é ajudar você a encontrar e lapidar a sua própria voz.",
             "specialties": [
                 {
-                    "title": "Técnica Vocal",
-                    "desc": "Controle de apoio, agudos, graves e vibrato."
+                    "title": "Música",
+                    "desc": ""
                 },
                 {
-                    "title": "Saúde Vocal",
-                    "desc": "Exercícios para aquecimento vocal seguro e longevidade."
+                    "title": "Vocal",
+                    "desc": ""
                 },
                 {
-                    "title": "Expressão Corporal",
-                    "desc": "Como vencer a timidez e dominar o palco."
-                }
-            ]
-        },
-        {
-            "id": "beatriz",
-            "name": "Beatriz",
-            "fullName": "Professora Beatriz",
-            "avatar": "🎹",
-            "imgUrl": "img\/beatriz.jpg",
-            "tag": "Professora de Teclado",
-            "instrument": "Teclado & Piano",
-            "bio": "Bacharel em Piano, a Professora Beatriz ensina com paciência e foco na independência das mãos, leitura de partituras de forma descomplicada e estruturação harmônica para teclado e piano clássico ou popular.",
-            "quote": "A música clássica e moderna se encontram nas teclas. Vamos tocar com sentimento e técnica.",
-            "specialties": [
-                {
-                    "title": "Partitura",
-                    "desc": "Leitura e interpretação musical simplificada."
+                    "title": "canto",
+                    "desc": ""
                 },
                 {
-                    "title": "Independência",
-                    "desc": "Exercícios de coordenação motora fina para teclado."
-                },
-                {
-                    "title": "Piano Clássico",
-                    "desc": "Postura, dedilhado e dinâmicas de expressão tradicionais."
-                }
-            ]
-        },
-        {
-            "id": "lucas",
-            "name": "Lucas",
-            "fullName": "Professor Lucas",
-            "avatar": "🎸",
-            "imgUrl": "img\/lucas.jpg",
-            "tag": "Professor de Cordas",
-            "instrument": "Violão & Guitarra",
-            "bio": "Com ampla experiência em palcos de Colatina e região, o Professor Lucas ensina violão popular, violão clássico e guitarra elétrica, focando em improvisação, solos e no repertório preferido de cada aluno.",
-            "quote": "Toda grande música começa com um acorde simples. O segredo está na dedicação.",
-            "specialties": [
-                {
-                    "title": "Improvisação",
-                    "desc": "Escalas pentatônicas, solos e formação de acordes."
-                },
-                {
-                    "title": "Ritmos",
-                    "desc": "Dedilhados, batidas e levadas para diversos estilos."
-                },
-                {
-                    "title": "Guitarra Elétrica",
-                    "desc": "Técnicas de palhetada alternada, legato e efeitos."
-                }
-            ]
-        },
-        {
-            "id": "sara",
-            "name": "Sara",
-            "fullName": "Professora Sara",
-            "avatar": "🥁",
-            "imgUrl": "img\/sara.jpg",
-            "tag": "Professora Infantil",
-            "instrument": "Musicalização Infantil & Bateria",
-            "bio": "Pedagoga e especialista em educação musical, a Professora Sara conduz atividades lúdicas de iniciação ao ritmo, canto coletivo e reconhecimento de instrumentos para crianças de todas as idades.",
-            "quote": "A música é o primeiro idioma da imaginação da criança. Vamos brincar de fazer som!",
-            "specialties": [
-                {
-                    "title": "Jogos Musicais",
-                    "desc": "Brincadeiras sonoras que ensinam teoria e ritmo de forma lúdica."
-                },
-                {
-                    "title": "Iniciação Rítmica",
-                    "desc": "Desenvolvimento motor e percepção musical primária."
-                },
-                {
-                    "title": "Flauta Doce & Percussão",
-                    "desc": "Introdução a instrumentos de sopro e percussão leve."
-                }
-            ]
-        },
-        {
-            "id": "natan",
-            "name": "Natan",
-            "fullName": "ad",
-            "avatar": "🎙️",
-            "instrument": "as",
-            "tag": "ad",
-            "bio": "ad",
-            "quote": "ad",
-            "specialties": [
-                {
-                    "title": "da",
+                    "title": "voz",
                     "desc": ""
                 }
             ],
-            "imgUrl": ""
+            "imgUrl": "img\/upload_6a5153709f331.png"
         }
     ],
-    "enrollments": [],
+    "students": [],
+    "mural": [
+        {
+            "id": 1,
+            "title": "Teste 1",
+            "imgUrl": "img\/upload_6a514fbde682b.png"
+        },
+        {
+            "id": 2,
+            "title": "Prática em Conjunto",
+            "imgUrl": "img\/background.png"
+        },
+        {
+            "id": 3,
+            "title": "Teclado e Partituras",
+            "imgUrl": "img\/background.png"
+        },
+        {
+            "id": 4,
+            "title": "Recital de Fim de Ano",
+            "imgUrl": "img\/background.png"
+        }
+    ],
     "avisos": [
         {
             "id": "aviso-1",
-            "title": "Aulas de Férias e Workshops",
-            "content": "Estão abertas as inscrições para os workshops especiais de férias de inverno. Participe de práticas de grupo, improvisação e gravação em estúdio!",
+            "title": "Aula de bateria🥁",
+            "content": "Inscrições abertas para o curso de bateria!!!",
             "date": "2026-07-09"
         }
     ]

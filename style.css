@@ -1403,3 +1403,17 @@ select:focus {
 .hidden {
   display: none !important;
 }
+
+/* Profile Dropdown styling */
+.profile-dropdown {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+}
+
+.profile-dropdown.active-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}

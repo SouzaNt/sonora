@@ -5,43 +5,23 @@
         "cpf": "000.000.000-00",
         "birthdate": "2000-01-01",
         "password": "admin",
-        "role": "adm"
+        "role": "adm",
+        "phone": "27997147298",
+        "profilePic": "img\/upload_6a5152a009c62.jpg"
+    },
+    {
+        "name": "Gabriel Nogueira",
+        "username": "gabrielnog",
+        "cpf": "123.456.789-09",
+        "birthdate": "2000-10-10",
+        "phone": "(27) 99999-8888",
+        "password": "senhateste",
+        "role": "cliente",
+        "profilePic": ""
     },
     {
         "username": "gedeon",
         "name": "Gedeon",
-        "cpf": "111.111.111-11",
-        "birthdate": "1980-01-01",
-        "password": "123",
-        "role": "professor"
-    },
-    {
-        "username": "beatriz",
-        "name": "Beatriz",
-        "cpf": "222.222.222-22",
-        "birthdate": "1985-02-02",
-        "password": "123",
-        "role": "professor"
-    },
-    {
-        "username": "lucas",
-        "name": "Lucas",
-        "cpf": "333.333.333-33",
-        "birthdate": "1990-03-03",
-        "password": "123",
-        "role": "professor"
-    },
-    {
-        "username": "sara",
-        "name": "Sara",
-        "cpf": "444.444.444-44",
-        "birthdate": "1995-04-04",
-        "password": "123",
-        "role": "professor"
-    },
-    {
-        "username": "natan",
-        "name": "Natan",
         "cpf": "000.000.000-00",
         "birthdate": "2000-01-01",
         "password": "123",

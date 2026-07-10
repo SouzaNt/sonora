@@ -238,31 +238,24 @@ function updateHeaderAuth() {
 
   if (currentUser) {
     const avatarUrl = currentUser.profilePic || 'img/avatar_placeholder.svg';
-    const profileHtml = `
-      <div class="user-profile-header" style="display:flex; align-items:center; gap:0.5rem; cursor:pointer;" id="header-user-profile">
-          <img src="${avatarUrl}" alt="Avatar" style="width:28px; height:28px; border-radius:50%; object-fit:cover; border:1.5px solid var(--primary-color);" onerror="this.src='img/avatar_placeholder.svg';" />
-          <span class="user-greeting" style="margin:0; font-size: 0.95rem; font-weight:600; color:#fff;">Olá, ${currentUser.name.split(' ')[0]}</span>
+    authLi.innerHTML = `
+      <div class="user-avatar-container" style="position:relative; display:inline-block; vertical-align:middle; margin-left:1rem;">
+          <img src="${avatarUrl}" alt="Avatar" id="header-avatar-btn" style="width:36px; height:36px; border-radius:50%; object-fit:cover; border:2px solid var(--primary-color); cursor:pointer; display:block;" onerror="this.src='img/avatar_placeholder.svg';" />
+          <div id="profile-dropdown" class="profile-dropdown hidden-dropdown" style="position:absolute; right:0; top:45px; background:rgba(20,20,20,0.98); border:1px solid rgba(255,255,255,0.08); border-radius:0.8rem; padding:1.2rem; display:flex; flex-direction:column; gap:0.8rem; min-width:200px; box-shadow:0 10px 30px rgba(0,0,0,0.6); backdrop-filter:blur(20px); z-index:3000;">
+              <div style="font-weight:700; color:#fff; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:0.5rem; margin-bottom:0.3rem; font-size:0.95rem; text-align:left;">Olá, ${currentUser.name.split(' ')[0]}</div>
+              <a href="#" id="dropdown-profile-btn" style="color:#a0a0a0; font-size:0.9rem; text-decoration:none; transition:color 0.2s; text-align:left;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a0a0a0'">Meu Perfil</a>
+              ${currentUser.role === 'adm' ? `<a href="admin.html" style="color:#a0a0a0; font-size:0.9rem; text-decoration:none; transition:color 0.2s; text-align:left;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a0a0a0'">Painel ADM</a>` : ''}
+              <a href="#" class="logout-btn" style="color:#e74c3c; font-size:0.9rem; text-decoration:none; font-weight:600; margin-top:0.3rem; display:block; text-align:left;">Sair</a>
+          </div>
       </div>
     `;
 
-    if (currentUser.role === 'adm') {
-      authLi.innerHTML = `<div style="display:flex; align-items:center; gap:1.2rem;">${profileHtml} <a href="admin.html" class="admin-link">Painel ADM</a></div>`;
-      if (ctaDiv) {
-        ctaDiv.innerHTML = `<a href="#" class="button logout-btn" style="background: #333; border: 1px solid #d95a11;">Sair</a>`;
-      }
-      const mobileCta = mobileNavMenu ? mobileNavMenu.querySelector('.cta-mobile') : null;
-      if (mobileCta) {
-        mobileCta.innerHTML = `<a href="#" class="button logout-btn" style="background: #333; border: 1px solid #d95a11;">Sair</a>`;
-      }
-    } else {
-      authLi.innerHTML = profileHtml;
-      if (ctaDiv) {
-        ctaDiv.innerHTML = `<a href="#" class="button logout-btn" style="background: #333; border: 1px solid #d95a11; margin-left: 0.5rem;">Sair</a>`;
-      }
-      const mobileCta = mobileNavMenu ? mobileNavMenu.querySelector('.cta-mobile') : null;
-      if (mobileCta) {
-        mobileCta.innerHTML = `<a href="#" class="button logout-btn" style="background: #333; border: 1px solid #d95a11;">Sair</a>`;
-      }
+    if (ctaDiv) {
+      ctaDiv.innerHTML = '';
+    }
+    const mobileCta = mobileNavMenu ? mobileNavMenu.querySelector('.cta-mobile') : null;
+    if (mobileCta) {
+      mobileCta.innerHTML = '';
     }
 
     // Set mobile user profile panel in mobile nav drawer
@@ -289,26 +282,48 @@ function updateHeaderAuth() {
       };
     }
 
-    // Bind header click
+    // Bind dropdown toggling logic
     setTimeout(() => {
-      const headerProfileEl = document.getElementById('header-user-profile');
-      if (headerProfileEl) {
-        headerProfileEl.onclick = () => openUserProfileModal();
+      const avatarBtn = document.getElementById('header-avatar-btn');
+      const dropdown = document.getElementById('profile-dropdown');
+      const dropdownProfileBtn = document.getElementById('dropdown-profile-btn');
+
+      if (avatarBtn && dropdown) {
+        avatarBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          dropdown.classList.toggle('active-dropdown');
+        });
+        
+        document.addEventListener('click', () => {
+          dropdown.classList.remove('active-dropdown');
+        });
+
+        if (dropdownProfileBtn) {
+          dropdownProfileBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dropdown.classList.remove('active-dropdown');
+            openUserProfileModal();
+          });
+        }
       }
     }, 100);
 
   } else {
-    authLi.innerHTML = ''; // Hide regular text link
+    authLi.innerHTML = `<a href="login.html" class="login-btn-header" style="color:rgba(255,255,255,0.5); text-decoration:none; display:flex; align-items:center; gap:0.4rem; font-size:0.9rem; font-weight:600; padding:0.5rem 1rem; border-radius:8px; border:1px solid rgba(255,255,255,0.1); transition: all 0.2s;" onmouseover="this.style.color='#fff'; this.style.borderColor='rgba(255,255,255,0.3)';" onmouseout="this.style.color='rgba(255,255,255,0.5)'; this.style.borderColor='rgba(255,255,255,0.1)';"><svg style="width:14px; height:14px; fill:currentColor;" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg> Entrar</a>`;
     if (mobileNavMenu) {
       const mobileUserDiv = mobileNavMenu.querySelector('.mobile-user-profile');
       if (mobileUserDiv) mobileUserDiv.remove();
     }
+    const waLink = (window.sonoraData && window.sonoraData.texts && window.sonoraData.texts.whatsappLink) 
+      ? window.sonoraData.texts.whatsappLink 
+      : 'https://api.whatsapp.com/message/GBODBOK3OAPBL1?autoload=1&app_absent=0&utm_source=ig';
     if (ctaDiv) {
-      ctaDiv.innerHTML = `<a href="login.html" class="button enroll-btn">Entrar</a>`;
+      ctaDiv.innerHTML = `<a href="${waLink}" class="button enroll-btn" target="_blank" rel="noopener">Matricule‑se</a>`;
     }
     const mobileCta = mobileNavMenu ? mobileNavMenu.querySelector('.cta-mobile') : null;
     if (mobileCta) {
-      mobileCta.innerHTML = `<a href="login.html" class="button enroll-btn">Entrar</a>`;
+      mobileCta.innerHTML = `<a href="${waLink}" class="button enroll-btn" target="_blank" rel="noopener">Matricule‑se</a>`;
     }
   }
 
@@ -340,12 +355,10 @@ function renderHomepageCourses(data) {
       <div class="icon">${course.icon}</div>
       <h3>${course.title}</h3>
       <p>${course.desc}</p>
-      <button class="button enroll-course-btn" data-course-title="${course.title}" style="margin-top: 1.5rem; background: #d95a11; border: none; color: #fff; padding: 0.5rem 1rem; border-radius: 0.4rem; font-weight: 600; cursor: pointer; font-size: 0.9rem; transition: transform 0.2s ease; width: 100%;">Matricular-se</button>
+      <a href="${data.texts.whatsappLink}" target="_blank" rel="noopener" class="button" style="margin-top: 1.5rem; background: #d95a11; border: none; color: #fff; padding: 0.5rem 1rem; border-radius: 0.4rem; font-weight: 600; cursor: pointer; font-size: 0.9rem; transition: transform 0.2s ease; width: 100%; display: inline-block; text-align: center; text-decoration: none;">Matricular-se</a>
     `;
     cardsContainer.appendChild(card);
   });
-
-  bindEnrollButtons(data);
 }
 
 // Render dynamic course detailed grid in cursos.html
@@ -379,12 +392,10 @@ function renderDetailedCourses(data) {
         <span><strong>Público:</strong> ${course.audience || 'Geral'}</span>
         <span><strong>Modalidade:</strong> ${course.modality || 'Presencial'}</span>
       </div>
-      <button class="button course-btn enroll-course-btn" data-course-title="${course.title}" style="width: 100%; border: none; cursor: pointer;">Quero me Matricular</button>
+      <a href="${data.texts.whatsappLink}" target="_blank" rel="noopener" class="button course-btn" style="width: 100%; border: none; cursor: pointer; display: inline-block; text-align: center; text-decoration: none;">Quero me Matricular</a>
     `;
     container.appendChild(card);
   });
-
-  bindEnrollButtons(data);
 }
 
 // Render dynamic teachers in professores.html
@@ -489,61 +500,7 @@ function bindTeacherSwitcher() {
 
 // Handle Client interactive course enrollments
 function bindEnrollButtons(data) {
-  const enrollBtns = document.querySelectorAll('.enroll-course-btn');
-  enrollBtns.forEach(btn => {
-    btn.addEventListener('click', function (e) {
-      e.preventDefault();
-      const courseTitle = this.getAttribute('data-course-title');
-      const currentUser = JSON.parse(localStorage.getItem('sonoraCurrentUser'));
-
-      if (!currentUser) {
-        alert('Por favor, faça login ou cadastre-se para se matricular no curso.');
-        window.location.href = 'login.html';
-        return;
-      }
-
-      if (currentUser.role === 'adm') {
-        alert('Administradores não podem se matricular em cursos.');
-        return;
-      }
-
-      if (!data) data = window.sonoraData;
-      const alreadyEnrolled = data.enrollments.some(enc => enc.username === currentUser.username && enc.courseTitle === courseTitle);
-
-      if (alreadyEnrolled) {
-        alert(`Você já está matriculado no curso: ${courseTitle}`);
-        return;
-      }
-
-      data.enrollments.push({
-        username: currentUser.username,
-        name: currentUser.name,
-        phone: currentUser.phone || 'Não informado',
-        courseTitle: courseTitle
-      });
-
-      fetch('data.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      })
-      .then(res => res.json())
-      .then(resData => {
-        if (resData.success) {
-          alert(`Matrícula solicitada com sucesso no curso: ${courseTitle}!`);
-          window.open(data.texts.whatsappLink, '_blank');
-        } else {
-          alert('Erro ao enviar matrícula para o servidor.');
-        }
-      })
-      .catch(err => {
-        console.error(err);
-        localStorage.setItem('sonoraData', JSON.stringify(data));
-        alert(`Matrícula solicitada com sucesso no curso (salvo localmente): ${courseTitle}!`);
-        window.open(data.texts.whatsappLink, '_blank');
-      });
-    });
-  });
+  // Matrículas now point directly to WhatsApp.
 }
 
 // Read site texts/data and inject it into the DOM
@@ -599,6 +556,11 @@ function loadDynamicContent(data) {
       fInstaLink.textContent = data.texts.instagram;
       fInstaLink.href = data.texts.instagramLink;
     }
+
+    const fCopy = footerContent.querySelector('p:nth-child(3)');
+    if (fCopy && !fCopy.querySelector('.admin-login-link')) {
+      fCopy.innerHTML += ` | <a href="login.html" class="admin-login-link" style="color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">Acesso Restrito</a>`;
+    }
   }
 
   // Render course & teacher items
@@ -606,6 +568,47 @@ function loadDynamicContent(data) {
   renderDetailedCourses(data);
   renderTeachersPage(data);
   renderAvisos(data);
+  renderMuralCollage(data);
+
+  // In sobre.html, render the homepage content at the bottom old gallery place
+  const aboutHomepageTitle = document.getElementById('about-homepage-title');
+  if (aboutHomepageTitle) aboutHomepageTitle.textContent = data.texts.aboutTitle;
+
+  const aboutHomepageText = document.getElementById('about-homepage-text');
+  if (aboutHomepageText) aboutHomepageText.textContent = data.texts.aboutText1;
+
+  const aboutHomepageImage = document.getElementById('about-homepage-image');
+  if (aboutHomepageImage) aboutHomepageImage.src = 'img/about.jpg?t=' + Date.now();
+}
+
+// Render dynamic mural photo collage in index.html
+function renderMuralCollage(data) {
+  const container = document.getElementById('mural-collage-container');
+  if (!container) return;
+
+  if (!data) data = window.sonoraData;
+  if (!data.mural || data.mural.length === 0) {
+    data.mural = [
+      { id: 1, title: "Aulas de Canto", imgUrl: "img/background.png" },
+      { id: 2, title: "Prática em Conjunto", imgUrl: "img/background.png" },
+      { id: 3, title: "Teclado e Partituras", imgUrl: "img/background.png" },
+      { id: 4, title: "Recital de Fim de Ano", imgUrl: "img/background.png" }
+    ];
+  }
+
+  container.innerHTML = '';
+  data.mural.forEach((item, index) => {
+    const idx = index + 1;
+    const card = document.createElement('div');
+    card.className = `collage-item p${idx}`;
+    card.innerHTML = `
+      <div class="collage-inner">
+          <div class="mural-pic-placeholder" style="background-image: url('${item.imgUrl || 'img/background.png'}'); background-size: cover; background-position: center;"></div>
+          <span>${item.title}</span>
+      </div>
+    `;
+    container.appendChild(card);
+  });
 }
 
 // Render dynamic notice board (mural de avisos) in index.html
@@ -686,6 +689,25 @@ function openUserProfileModal() {
   `;
 
   modal.classList.remove('hidden');
+
+  // Handle phone mask in user profile modal
+  const pInput = document.getElementById('profile-phone');
+  if (pInput) {
+    pInput.addEventListener('input', function() {
+      let v = this.value.replace(/\D/g, '');
+      if (v.length > 11) v = v.slice(0, 11);
+
+      if (v.length > 10) {
+        this.value = v.replace(/^(\d{2})(\d{5})(\d{4})$/, "($1) $2-$3");
+      } else if (v.length > 6) {
+        this.value = v.replace(/^(\d{2})(\d{4})(\d{0,4})$/, "($1) $2-$3");
+      } else if (v.length > 2) {
+        this.value = v.replace(/^(\d{2})(\d{0,5})$/, "($1) $2");
+      } else {
+        this.value = v;
+      }
+    });
+  }
 
   document.getElementById('close-profile-modal-btn').addEventListener('click', () => {
     modal.classList.add('hidden');

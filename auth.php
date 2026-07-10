@@ -66,48 +66,55 @@ if (!is_array($users)) {
 }
 
 if ($action === 'register') {
-    $name = isset($input['name']) ? trim($input['name']) : '';
-    $username = isset($input['username']) ? trim($input['username']) : '';
-    $cpf = isset($input['cpf']) ? trim($input['cpf']) : '';
-    $birthdate = isset($input['birthdate']) ? trim($input['birthdate']) : '';
-    $phone = isset($input['phone']) ? trim($input['phone']) : '';
-    $password = isset($input['password']) ? $input['password'] : '';
-    $role = 'cliente'; // Force 'cliente' to prevent adm creation or unauthorized roles
-
-    if (empty($name) || empty($username) || empty($cpf) || empty($birthdate) || empty($phone) || empty($password)) {
-        echo json_encode(['success' => false, 'message' => 'Todos os campos são obrigatórios.']);
-        exit;
-    }
-
-    // Check if username or CPF already exists
-    foreach ($users as $u) {
-        if (strtolower($u['username']) === strtolower($username)) {
-            echo json_encode(['success' => false, 'message' => 'Nome de usuário já cadastrado.']);
-            exit;
-        }
-        if ($u['cpf'] === $cpf) {
-            echo json_encode(['success' => false, 'message' => 'CPF já cadastrado.']);
-            exit;
-        }
-    }
-
-    $newUser = [
-        'name' => $name,
-        'username' => $username,
-        'cpf' => $cpf,
-        'birthdate' => $birthdate,
-        'phone' => $phone,
-        'password' => $password,
-        'role' => $role,
-        'profilePic' => ''
-    ];
-
-    $users[] = $newUser;
-    file_put_contents($jsonFile, json_encode($users, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-
-    echo json_encode(['success' => true, 'message' => 'Conta criada com sucesso!']);
+    echo json_encode(['success' => false, 'message' => 'O cadastro de novos usuários está desativado. Apenas o administrador pode acessar.']);
     exit;
 } 
+
+if ($action === 'save_user') {
+    $username = isset($input['username']) ? trim($input['username']) : '';
+    $name = isset($input['name']) ? trim($input['name']) : '';
+    $password = isset($input['password']) ? $input['password'] : '';
+    $role = isset($input['role']) ? trim($input['role']) : 'cliente';
+    $cpf = isset($input['cpf']) ? trim($input['cpf']) : '';
+    $phone = isset($input['phone']) ? trim($input['phone']) : '';
+    $birthdate = isset($input['birthdate']) ? trim($input['birthdate']) : '';
+    
+    if (empty($username) || empty($name) || empty($password)) {
+        echo json_encode(['success' => false, 'message' => 'Nome, Usuário e Senha são obrigatórios.']);
+        exit;
+    }
+    
+    $found = false;
+    foreach ($users as &$u) {
+        if (strtolower($u['username']) === strtolower($username)) {
+            $u['name'] = $name;
+            $u['password'] = $password;
+            $u['role'] = $role;
+            $u['cpf'] = $cpf;
+            $u['phone'] = $phone;
+            $u['birthdate'] = $birthdate;
+            $found = true;
+            break;
+        }
+    }
+    unset($u);
+    
+    if (!$found) {
+        $users[] = [
+            'username' => $username,
+            'name' => $name,
+            'password' => $password,
+            'role' => $role,
+            'cpf' => $cpf,
+            'phone' => $phone,
+            'birthdate' => $birthdate
+        ];
+    }
+    
+    file_put_contents($jsonFile, json_encode($users, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+    echo json_encode(['success' => true, 'message' => 'Usuário salvo com sucesso.']);
+    exit;
+}
 
 if ($action === 'login') {
     $username = isset($input['username']) ? trim($input['username']) : '';
@@ -168,6 +175,38 @@ if ($action === 'update_profile') {
     if ($found) {
         file_put_contents($jsonFile, json_encode($users, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
         echo json_encode(['success' => true, 'message' => 'Perfil atualizado com sucesso.']);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Usuário não encontrado.']);
+    }
+    exit;
+}
+
+if ($action === 'list_users') {
+    // Return all users for the administrative panel management
+    echo json_encode(['success' => true, 'users' => $users]);
+    exit;
+}
+
+if ($action === 'delete_user') {
+    $usernameToDelete = isset($_GET['username']) ? trim($_GET['username']) : '';
+    if ($usernameToDelete === 'admin') {
+        echo json_encode(['success' => false, 'message' => 'Não é possível remover o administrador principal.']);
+        exit;
+    }
+    
+    $found = false;
+    foreach ($users as $index => $u) {
+        if (strtolower($u['username']) === strtolower($usernameToDelete)) {
+            unset($users[$index]);
+            $found = true;
+            break;
+        }
+    }
+    
+    if ($found) {
+        $users = array_values($users); // Reindex
+        file_put_contents($jsonFile, json_encode($users, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+        echo json_encode(['success' => true, 'message' => 'Usuário removido com sucesso.']);
     } else {
         echo json_encode(['success' => false, 'message' => 'Usuário não encontrado.']);
     }
